@@ -72,5 +72,3 @@ Window::~Window()
     ImGui::DestroyContext();
     glfwTerminate();
 }
-
-
