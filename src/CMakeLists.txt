@@ -23,7 +23,9 @@ set(SOURCE_FILES
 		../mesh/mesh.h
 		../mesh/mesh.cpp
 		../model/model.h
-		../model/model.cpp)
+		../model/model.cpp
+		../textureLoader/textureLoader.h
+		../textureLoader/textureLoader.cpp)
 
 add_executable (CG4_Scene "main.cpp" ${SOURCE_FILES})
 
@@ -33,10 +35,12 @@ target_include_directories(CG4_Scene PRIVATE
 		"../third_party/imgui"
 		"../third_party/assimp"
 		"../third_party/glm"
+		"../third_party/headers"
 		"../window"
 		"../shader"
 		"../mesh"
-		"../model")
+		"../model"
+		"../textureLoader")
 
 find_package(OpenGL REQUIRED)
 

@@ -13,12 +13,8 @@ struct Vertex
     glm::vec2 TexCoords;
 };
 
-struct Texture
-{
-    unsigned int Id;
-    std::string Type;
-    std::string Path;
-};
+// Forward declaration
+struct Texture;
 
 class Mesh
 {
