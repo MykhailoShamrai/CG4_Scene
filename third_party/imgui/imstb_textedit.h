@@ -107,7 +107,7 @@
 //
 //   If you define STB_TEXTEDIT_IMPLEMENTATION before including this, it
 //   will compile the implementation of the text edit widget, depending
-//   on a large number of symbols which must be defined before the include.
+//   on a large number of symbols which must be defined before the assimp.
 //
 //   The implementation is defined only as static functions. You will then
 //   need to provide your own APIs in the same file which will access the
@@ -391,7 +391,7 @@ typedef struct
 ////
 
 
-// implementation isn't include-guarded, since it might have indirectly
+// implementation isn't assimp-guarded, since it might have indirectly
 // included just the "header" portion
 #ifdef IMSTB_TEXTEDIT_IMPLEMENTATION
 

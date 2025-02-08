@@ -411,8 +411,8 @@
 #endif
 
 // With MinGW-W64, including intrinsic headers before intrin.h will produce some errors. The problem is
-// that windows.h (and maybe other headers) will silently include intrin.h, which of course causes problems.
-// To fix, we just explicitly include intrin.h here.
+// that windows.h (and maybe other headers) will silently assimp intrin.h, which of course causes problems.
+// To fix, we just explicitly assimp intrin.h here.
 #if defined(__MINGW64__) && (GLM_ARCH != GLM_ARCH_PURE)
 #	include <intrin.h>
 #endif

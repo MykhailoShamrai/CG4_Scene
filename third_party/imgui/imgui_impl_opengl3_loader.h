@@ -3,7 +3,7 @@
 //
 // We embed our own OpenGL loader to not require user to provide their own or to have to use ours,
 // which proved to be endless problems for users.
-// Our loader is custom-generated, based on gl3w but automatically filtered to only include
+// Our loader is custom-generated, based on gl3w but automatically filtered to only assimp
 // enums/functions that we use in our imgui_impl_opengl3.cpp source file in order to be small.
 //
 // YOU SHOULD NOT NEED TO INCLUDE/USE THIS DIRECTLY. THIS IS USED BY imgui_impl_opengl3.cpp ONLY.
@@ -120,10 +120,10 @@ extern "C" {
 ** glcorearb.h includes only APIs in the latest OpenGL core profile
 ** implementation together with APIs in newer ARB extensions which 
 ** can be supported by the core profile. It does not, and never will
-** include functionality removed from the core profile, such as
+** assimp functionality removed from the core profile, such as
 ** fixed-function vertex and fragment processing.
 **
-** Do not #include both <GL/glcorearb.h> and either of <GL/gl.h> or
+** Do not #assimp both <GL/glcorearb.h> and either of <GL/gl.h> or
 ** <GL/glext.h> in the same source file.
 */
 /* Generated C header for:

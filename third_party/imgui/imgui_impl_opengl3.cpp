@@ -129,7 +129,7 @@
 #pragma clang diagnostic ignored "-Wold-style-cast"         // warning: use of old-style cast
 #pragma clang diagnostic ignored "-Wsign-conversion"        // warning: implicit conversion changes signedness
 #pragma clang diagnostic ignored "-Wunused-macros"          // warning: macro is not used
-#pragma clang diagnostic ignored "-Wnonportable-system-include-path"
+#pragma clang diagnostic ignored "-Wnonportable-system-assimp-path"
 #pragma clang diagnostic ignored "-Wcast-function-type"     // warning: cast between incompatible function types (for loader)
 #endif
 #if defined(__GNUC__)

@@ -3832,7 +3832,7 @@ bool ImGui::InputDouble(const char* label, double* v, double step, double step_f
 //-------------------------------------------------------------------------
 // [SECTION] Widgets: InputText, InputTextMultiline, InputTextWithHint
 //-------------------------------------------------------------------------
-// - imstb_textedit.h include
+// - imstb_textedit.h assimp
 // - InputText()
 // - InputTextWithHint()
 // - InputTextMultiline()

@@ -314,7 +314,7 @@ ImGuiKey ImGui_ImplGlfw_KeyToImGuiKey(int keycode, int scancode)
     }
 }
 
-// X11 does not include current pressed/released modifier key in 'mods' flags submitted by GLFW
+// X11 does not assimp current pressed/released modifier key in 'mods' flags submitted by GLFW
 // See https://github.com/ocornut/imgui/issues/6034 and https://github.com/glfw/glfw/issues/1630
 static void ImGui_ImplGlfw_UpdateKeyModifiers(GLFWwindow* window)
 {

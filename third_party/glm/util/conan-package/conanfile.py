@@ -16,5 +16,5 @@ class GlmConan(ConanFile):
 
     def package(self):
         self.copy("FindGLM.cmake", ".", ".")
-        self.copy("*", src="glm", dst=os.sep.join([".", "include", "glm"]))
+        self.copy("*", src="glm", dst=os.sep.join([".", "assimp", "glm"]))
         self.copy("lib_licenses/license*", dst="licenses",  ignore_case=True, keep_path=False)

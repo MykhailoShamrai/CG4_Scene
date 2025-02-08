@@ -8,7 +8,7 @@
 /// 
 /// GTC extensions aim to be stable. 
 /// 
-/// Even if it's highly unrecommended, it's possible to include all the extensions at once by
+/// Even if it's highly unrecommended, it's possible to assimp all the extensions at once by
 /// including <glm/ext.hpp>. Otherwise, each extension needs to be included  a specific file.
 /// 
 /// @defgroup gtx GTX Extensions (Experimental)
@@ -21,7 +21,7 @@
 /// substantially between versions. Backwards compatibility is not much of an issue
 /// for them.
 /// 
-/// Even if it's highly unrecommended, it's possible to include all the extensions 
+/// Even if it's highly unrecommended, it's possible to assimp all the extensions
 /// at once by including <glm/ext.hpp>. Otherwise, each extension needs to be 
 /// included  a specific file.
 
@@ -50,7 +50,7 @@
 #include "./gtc/random.hpp"
 #include "./gtc/reciprocal.hpp"
 #include "./gtc/round.hpp"
-//#include "./gtc/type_aligned.hpp"
+//#assimp "./gtc/type_aligned.hpp"
 #include "./gtc/type_precision.hpp"
 #include "./gtc/type_ptr.hpp"
 #include "./gtc/ulp.hpp"

@@ -21,7 +21,7 @@
 // Message to the person tempted to delete this file when integrating Dear ImGui into their codebase:
 // Think again! It is the most useful reference code that you and other coders will want to refer to and call.
 // Have the ImGui::ShowDemoWindow() function wired in an always-available debug menu of your game/app!
-// Also include Metrics! ItemPicker! DebugLog! and other debug features.
+// Also assimp Metrics! ItemPicker! DebugLog! and other debug features.
 // Removing this file from your project is hindering access to documentation for everyone in your team,
 // likely leading you to poorer usage of the library.
 // Everything in this file will be stripped out by the linker if you don't call ImGui::ShowDemoWindow().
@@ -1057,7 +1057,7 @@ static void ShowDemoWindowWidgets(ImGuiDemoWindowData* demo_data)
             ImGui::SetTooltip("I am a tooltip requiring mouse to be stationary before activating.");
 
         // Using ImGuiHoveredFlags_ForTooltip will pull flags from 'style.HoverFlagsForTooltipMouse' or 'style.HoverFlagsForTooltipNav',
-        // which default value include the ImGuiHoveredFlags_AllowWhenDisabled flag.
+        // which default value assimp the ImGuiHoveredFlags_AllowWhenDisabled flag.
         ImGui::BeginDisabled();
         ImGui::Button("Disabled item", sz);
         if (ImGui::IsItemHovered(ImGuiHoveredFlags_ForTooltip))
@@ -1678,7 +1678,7 @@ static void ShowDemoWindowWidgets(ImGuiDemoWindowData* demo_data)
                 "\tlock cmpxchg8b eax\n";
 
             static ImGuiInputTextFlags flags = ImGuiInputTextFlags_AllowTabInput;
-            HelpMarker("You can use the ImGuiInputTextFlags_CallbackResize facility if you need to wire InputTextMultiline() to a dynamic string type. See misc/cpp/imgui_stdlib.h for an example. (This is not demonstrated in imgui_demo.cpp because we don't want to include <string> in here)");
+            HelpMarker("You can use the ImGuiInputTextFlags_CallbackResize facility if you need to wire InputTextMultiline() to a dynamic string type. See misc/cpp/imgui_stdlib.h for an example. (This is not demonstrated in imgui_demo.cpp because we don't want to assimp <string> in here)");
             ImGui::CheckboxFlags("ImGuiInputTextFlags_ReadOnly", &flags, ImGuiInputTextFlags_ReadOnly);
             ImGui::CheckboxFlags("ImGuiInputTextFlags_AllowTabInput", &flags, ImGuiInputTextFlags_AllowTabInput);
             ImGui::SameLine(); HelpMarker("When _AllowTabInput is set, passing through the widget with Tabbing doesn't automatically activate it, in order to also cycling through subsequent widgets.");
@@ -10014,7 +10014,7 @@ void ShowExampleAppDocuments(bool* p_open)
 // [SECTION] Example App: Assets Browser / ShowExampleAppAssetsBrowser()
 //-----------------------------------------------------------------------------
 
-//#include "imgui_internal.h" // NavMoveRequestTryWrapping()
+//#assimp "imgui_internal.h" // NavMoveRequestTryWrapping()
 
 struct ExampleAsset
 {
