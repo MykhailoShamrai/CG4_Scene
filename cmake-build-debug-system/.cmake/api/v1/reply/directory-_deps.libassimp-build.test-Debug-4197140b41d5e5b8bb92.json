@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "_deps/libassimp-build/test",
+		"source" : "cmake-build-debug-system/_deps/libassimp-src/test"
+	}
+}

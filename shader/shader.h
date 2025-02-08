@@ -18,6 +18,7 @@ public:
     void SetInt(const std::string &name, int value) const;
     void SetFloat(const std::string &name, float value) const;
     void SetMat4(const std::string &name, glm::mat4 value) const;
+    void SetMat3(const std::string &name, glm::mat3 value) const;
 };
 
 #endif //SHADER_H

@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "_deps/libassimp-build/contrib/zlib",
+		"source" : "cmake-build-debug-system/_deps/libassimp-src/contrib/zlib"
+	}
+}

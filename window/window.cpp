@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 
+#include "glm/gtc/matrix_transform.hpp"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -46,7 +47,10 @@ Window::Window(const unsigned short &width, const unsigned short &height, const 
 
 void Window::GameLoop()
 {
+    glEnable(GL_DEPTH_TEST);
     main_scene.PrepareScene();
+    Shader mainShader = Shader("../shaders/vertexDefaultShader.vert",
+        "../shaders/fragmentDefaultShader.frag");
     glClearColor(0.1f, 0.2f, 0.0f, 1.0f);
     while (!glfwWindowShouldClose(window))
     {
@@ -60,6 +64,14 @@ void Window::GameLoop()
         ImGui::Text("FPS: %.1f", fps);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        mainShader.Use();
+        mainShader.SetMat4("model", glm::mat4(1.0f));
+        mainShader.SetMat4("view", glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
+        mainShader.SetMat4("projection", glm::mat4(1.0f));
+        mainShader.SetMat3("normalMatrix", glm::mat3(1.0f));
+        main_scene.DrawObjects(mainShader);
+
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

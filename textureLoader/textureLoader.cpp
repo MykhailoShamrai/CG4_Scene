@@ -9,14 +9,14 @@
 
 unsigned int TextureLoader::TextureFromFile(const std::string &filename, const std::string &directory)
 {
+    stbi_set_flip_vertically_on_load(true);
     std::string path = directory + '/' + filename;
 
     unsigned int textureId;
     glGenTextures(1, &textureId);
 
     int width, height, nrComponents;
-    unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrComponents,
-        0);
+    unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrComponents, 0);
     if (data)
     {
         GLenum format = GL_RGB;
