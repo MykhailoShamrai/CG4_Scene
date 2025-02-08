@@ -1,4 +1,7 @@
 #include "window.h"
+
+#include <stdexcept>
+
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -43,6 +46,7 @@ Window::Window(const unsigned short &width, const unsigned short &height, const 
 
 void Window::GameLoop()
 {
+    main_scene.PrepareScene();
     glClearColor(0.1f, 0.2f, 0.0f, 1.0f);
     while (!glfwWindowShouldClose(window))
     {
@@ -56,7 +60,6 @@ void Window::GameLoop()
         ImGui::Text("FPS: %.1f", fps);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

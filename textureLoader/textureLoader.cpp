@@ -1,12 +1,13 @@
 #include "textureLoader.h"
 
-#include <GL/gl.h>
 #include <glad/glad.h>
+#include <GL/gl.h>
+#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
 #include <stdexcept>
 
-unsigned int TextureLoader::TextureFromFile(const std::string &filename, const std::string &directory, bool gamma)
+unsigned int TextureLoader::TextureFromFile(const std::string &filename, const std::string &directory)
 {
     std::string path = directory + '/' + filename;
 

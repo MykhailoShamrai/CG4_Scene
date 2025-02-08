@@ -20,12 +20,17 @@ set(SOURCE_FILES
 		../window/window.h
 		../shader/shader.h
 		../shader/shader.cpp
-		../mesh/mesh.h
-		../mesh/mesh.cpp
-		../model/model.h
-		../model/model.cpp
+		../drawable/mesh/mesh.h
+		../drawable/mesh/mesh.cpp
+		../drawable/model/model.h
+		../drawable/model/model.cpp
 		../textureLoader/textureLoader.h
-		../textureLoader/textureLoader.cpp)
+		../textureLoader/textureLoader.cpp
+		../scene/scene.h
+		../drawable/drawable.h
+		../scene/scene.cpp
+		../third_party/headers/stb_image.h
+		../drawable/drawable.cpp)
 
 add_executable (CG4_Scene "main.cpp" ${SOURCE_FILES})
 
@@ -38,15 +43,16 @@ target_include_directories(CG4_Scene PRIVATE
 		"../third_party/headers"
 		"../window"
 		"../shader"
-		"../mesh"
-		"../model"
+		"../drawable"
+		"../drawable/mesh"
+		"../drawable/model"
 		"../textureLoader")
 
 find_package(OpenGL REQUIRED)
 
 target_link_libraries(CG4_Scene PRIVATE
 		glfw glad ${OPENGL_LIBRARIES}
-		${PROJECT_SOURCE_DIR}/third_party/assimp/assimp-vc143-mt.lib)
+		assimp::assimp)
 
 set_property(TARGET CG4_Scene PROPERTY CXX_STANDARD 20)
 
@@ -54,3 +60,8 @@ add_custom_command(TARGET CG4_Scene POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory
 		${PROJECT_SOURCE_DIR}/shadersSources ${PROJECT_BINARY_DIR}/shaders
 	COMMENT "Copying shaders")
+
+add_custom_command(TARGET CG4_Scene POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+		${PROJECT_SOURCE_DIR}/models ${PROJECT_BINARY_DIR}/models
+	COMMENT "Copying models")
