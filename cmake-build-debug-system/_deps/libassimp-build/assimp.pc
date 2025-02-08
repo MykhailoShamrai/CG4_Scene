@@ -1,9 +1,0 @@
-libdir=C:/Program Files (x86)/CG4_Scene/lib
-includedir=C:/Program Files (x86)/CG4_Scene/include
-
-Name: CG4_Scene
-Description: Import various well-known 3D model formats in an uniform manner.
-Version: 5.4.3
-Libs: -L${libdir} -lassimp
-Libs.private:  
-Cflags: -I${includedir}

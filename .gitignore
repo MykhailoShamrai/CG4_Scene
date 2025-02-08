@@ -43,8 +43,9 @@
 include/divisible/*
 
 
-## Local 
-
+## Local
+cmake-build-debug-system
+cmake-build-debug-system/**
 .idea
 .idea/*.xml
 out/build/**/*
