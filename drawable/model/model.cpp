@@ -9,6 +9,7 @@
 
 void Model::Draw(const Shader &shader)
 {
+    SetTransformationsForDrawable(shader);
     for (auto &mesh : meshes)
     {
         mesh.Draw(shader);

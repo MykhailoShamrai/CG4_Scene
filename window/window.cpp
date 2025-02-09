@@ -33,6 +33,7 @@ Window::Window(const unsigned short &width, const unsigned short &height, const 
         throw std::runtime_error("Failed to initialize GLAD");
     }
 
+    glEnable(GL_DEPTH_TEST);
     // ImGui initialization
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -47,10 +48,17 @@ Window::Window(const unsigned short &width, const unsigned short &height, const 
 
 void Window::GameLoop()
 {
-    glEnable(GL_DEPTH_TEST);
+    // Prepare start scene
     main_scene.PrepareScene();
+    // Main shaders
     Shader mainShader = Shader("../shaders/vertexDefaultShader.vert",
         "../shaders/fragmentDefaultShader.frag");
+
+    // Projection matrix. It is passed into shader in window functions, because width and height
+    // depend on window configuration
+    glm::mat4 proj = glm::perspective(glm::radians(45.0f), static_cast<float>(width)
+        / static_cast<float>(height), 0.1f, 100.0f);
+
     glClearColor(0.1f, 0.2f, 0.0f, 1.0f);
     while (!glfwWindowShouldClose(window))
     {
@@ -66,9 +74,9 @@ void Window::GameLoop()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         mainShader.Use();
-        mainShader.SetMat4("model", glm::mat4(1.0f));
-        mainShader.SetMat4("view", glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
-        mainShader.SetMat4("projection", glm::mat4(1.0f));
+        mainShader.SetMat4("view", glm::mat4(1.0f));
+        // Projection matrix is passed here.
+        mainShader.SetMat4("projection", proj);
         mainShader.SetMat3("normalMatrix", glm::mat3(1.0f));
         main_scene.DrawObjects(mainShader);
 
