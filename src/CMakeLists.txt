@@ -30,7 +30,9 @@ set(SOURCE_FILES
 		../drawable/drawable.h
 		../scene/scene.cpp
 		../third_party/headers/stb_image.h
-		../drawable/drawable.cpp)
+		../drawable/drawable.cpp
+		../camera/camera.h
+		../camera/camera.cpp)
 
 add_executable (CG4_Scene "main.cpp" ${SOURCE_FILES})
 
@@ -46,7 +48,8 @@ target_include_directories(CG4_Scene PRIVATE
 		"../drawable"
 		"../drawable/mesh"
 		"../drawable/model"
-		"../textureLoader")
+		"../textureLoader"
+		"../camera")
 
 find_package(OpenGL REQUIRED)
 

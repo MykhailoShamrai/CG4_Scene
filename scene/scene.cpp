@@ -6,12 +6,12 @@
 
 #include "model.h"
 
-void Scene::LoadModelToScene(const std::string& fullPath, std::string modelName)
+void Scene::LoadModelToScene(const std::string& fullPath, const std::string& modelName)
 {
     try
     {
         std::cout << "Loaded model: " << modelName << std::endl;
-        Drawables.insert({modelName, std::make_unique<Model>(fullPath)});
+        Drawables.insert({modelName, std::make_shared<Model>(fullPath)});
         return;
     }
     catch (std::exception e)
@@ -20,14 +20,40 @@ void Scene::LoadModelToScene(const std::string& fullPath, std::string modelName)
         return;
     }
 }
-void Scene::PrepareScene()
+
+void Scene::AddCamera(const std::string& cameraName, const std::shared_ptr<Camera>& camera)
 {
-    LoadModelToScene("../models/backpack/backpack.obj", "backpack");
+    std::cout << "Adding camera to scene" << std::endl;
+
+    auto iteratorPair =  Cameras.insert({cameraName, camera});
+    // Make inserted or already existing camera ass current
+    CurrentCamera = iteratorPair.first->second;
 }
 
-void Scene::DrawObjects(const Shader &shader) const
+glm::mat4 Scene::GetViewMatrix()
 {
-    for (const auto& drawable : Drawables) {
+    if (CurrentCamera == nullptr)
+        throw std::runtime_error("No camera found");
+
+    return CurrentCamera->GetView();
+}
+
+void Scene::PrepareScene()
+{
+    AddCamera("mainCamera", std::make_shared<Camera>());
+    Cameras.at("mainCamera")->SetMovable(true);
+    LoadModelToScene("../models/backpack/backpack.obj", "backpack");
+    assert(Drawables.size() > 0);
+    assert(Drawables.find("backpack") != Drawables.end());
+    auto dr = Drawables.at("backpack");
+    dr->SetZPosition(-15.0f);
+    dr->SetZRotation(35.0f);
+}
+
+void Scene::DrawObjects(const Shader& shader) const
+{
+    for (const auto& drawable : Drawables)
+    {
         drawable.second->Draw(shader);
     }
 }

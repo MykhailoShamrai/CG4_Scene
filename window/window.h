@@ -4,7 +4,6 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
-
 #include "../scene/scene.h"
 class Window
 {
@@ -12,11 +11,25 @@ public:
     Window(const unsigned short &width, const unsigned short &height, const std::string &title = "Scene");
     void GameLoop();
     ~Window();
+    bool FPSmode = false;
+    bool FirstMouse = true;
 private:
     unsigned short width, height;
     GLFWwindow* window;
     std::string title;
-    Scene main_scene = Scene();
+    // Time between frames
+    float deltaTime = 0.0f;
+    float lastFrame = 0.0f;
+    float lastX;
+    float lastY;
+
+    // Main scene that should be visible
+    Scene mainScene = Scene();
+
+    void processMovement(GLFWwindow* window);
+    void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+    void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+    void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 };
 
 #endif //WINDOW_H
