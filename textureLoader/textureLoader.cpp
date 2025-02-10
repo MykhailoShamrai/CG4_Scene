@@ -9,7 +9,7 @@
 
 unsigned int TextureLoader::TextureFromFile(const std::string &filename, const std::string &directory)
 {
-    stbi_set_flip_vertically_on_load(true);
+    //stbi_set_flip_vertically_on_load(true);
     std::string path = directory + '/' + filename;
 
     unsigned int textureId;
