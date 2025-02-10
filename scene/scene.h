@@ -3,7 +3,7 @@
 #include <map>
 #include <memory>
 #include <string>
-#include <unordered_set>
+#include <unordered_map>
 
 #include "../camera/camera.h"
 #include "drawable.h"
@@ -12,14 +12,23 @@ class Scene
 {
 public:
     // Map of positions in world space
-    std::pmr::map<std::string, std::shared_ptr<Drawable>> Drawables;
+    std::pmr::unordered_map<std::string, std::shared_ptr<Drawable>> Drawables =
+        std::pmr::unordered_map<std::string, std::shared_ptr<Drawable>>();
+    std::shared_ptr<Drawable> ChosenObject;
+    std::string ChosenObjectName;
+
     // Set of cameras on scene
-    std::pmr::map<std::string, std::shared_ptr<Camera>> Cameras;
+    std::pmr::unordered_map<std::string, std::shared_ptr<Camera>> Cameras =
+        std::pmr::unordered_map<std::string, std::shared_ptr<Camera>>();
     std::shared_ptr<Camera> CurrentCamera;
+    std::string CurrentCameraName;
+
     void AddCamera(const std::string& cameraName, const std::shared_ptr<Camera>& camera);
     void LoadModelToScene(const std::string& fullPath, const std::string& modelName);
     void PrepareScene();
     void DrawObjects(const Shader& shader) const;
+    void UpdateSelectedCamera();
+    void UpdateChosenObject();
     glm::mat4 GetViewMatrix();
 
 private:

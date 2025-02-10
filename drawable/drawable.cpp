@@ -7,6 +7,16 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
+float Drawable::GetXPosition() const { return worldPosition.x; }
+float Drawable::GetYPosition() const { return worldPosition.y; }
+float Drawable::GetZPosition() const { return worldPosition.z; }
+float Drawable::GetXRotation() const { return rotation.x; }
+float Drawable::GetYRotation() const { return rotation.y; }
+float Drawable::GetZRotation() const { return rotation.z; }
+float Drawable::GetScale() const { return scale.x; }
+glm::vec3 Drawable::GetWorldPosition() const { return worldPosition; }
+glm::vec3 Drawable::GetRotation() const { return rotation; }
+
 void Drawable::SetXPosition(float x) { worldPosition.x = x; }
 void Drawable::SetYPosition(float y) { worldPosition.y = y; }
 void Drawable::SetZPosition(float z) { worldPosition.z = z; }

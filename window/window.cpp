@@ -1,6 +1,9 @@
 #include "window.h"
 
+#include <algorithm>
+#include <functional>
 #include <stdexcept>
+#include <vector>
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "imgui.h"
@@ -42,8 +45,6 @@ Window::Window(const unsigned short &width, const unsigned short &height, const 
     ImGuiIO &io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init();
 
     glfwSetWindowUserPointer(window, this);
     auto mouseCallback = [](GLFWwindow *w, double xpos, double ypos)
@@ -58,6 +59,9 @@ Window::Window(const unsigned short &width, const unsigned short &height, const 
 
     glfwSetKeyCallback(window, keyCallback);
     glfwSetCursorPosCallback(window, mouseCallback);
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init();
 }
 
 void Window::GameLoop()
@@ -78,14 +82,15 @@ void Window::GameLoop()
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime          = currentFrame - lastFrame;
         lastFrame          = currentFrame;
-        // Imgui window
+
+
+        // ------------- IMGUI PART OF RENDERING ---------------- //
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::Text("Options");
-        float fps = ImGui::GetIO().Framerate;
-        ImGui::Text("FPS: %.1f", fps);
+        renderGuiCameras();
+        renderGuiObjects();
 
         // Input for camera
         processMovement(window);
@@ -169,5 +174,200 @@ void Window::key_callback(GLFWwindow *window, int key, int scancode, int action,
             FirstMouse = true;
             FPSmode    = true;
         }
+    }
+}
+
+void Window::renderGuiCameras()
+{
+    ImGui::Begin("Cameras");
+    float fps = ImGui::GetIO().Framerate;
+    ImGui::Text("FPS: %.1f", fps);
+
+    // Part with list box
+    std::vector<const char *> keys;
+    for (const auto &kv : mainScene.Cameras)
+    {
+        keys.push_back(kv.first.c_str());
+    }
+
+    int currentIndex = -1;
+    if (!mainScene.CurrentCameraName.empty())
+    {
+        auto iterator = std::ranges::find(keys, mainScene.CurrentCameraName.c_str());
+        if (iterator != keys.end())
+        {
+            currentIndex = std::distance(keys.begin(), iterator);
+        }
+    }
+
+    if (ImGui::ListBox("Choose camera", &currentIndex, keys.data(), static_cast<int>(keys.size())))
+    {
+        if (currentIndex >= 0 && currentIndex < static_cast<int>(keys.size()))
+        {
+            mainScene.CurrentCameraName = keys[currentIndex];
+            mainScene.UpdateSelectedCamera();
+        }
+    }
+    ImGui::Text(mainScene.CurrentCameraName.c_str());
+
+    ImGui::End();
+}
+
+void Window::renderGuiObjects()
+{
+    ImGui::Begin("Movable objects");
+
+    std::vector<const char *> keys;
+    for (const auto &kv : mainScene.Drawables)
+    {
+        keys.push_back(kv.first.c_str());
+    }
+
+    int currentIndex = -1;
+    if (!mainScene.ChosenObjectName.empty())
+    {
+        auto iterator = std::ranges::find(keys, mainScene.ChosenObjectName.c_str());
+        if (iterator != keys.end())
+        {
+            currentIndex = std::distance(keys.begin(), iterator);
+        }
+    }
+
+    if (ImGui::ListBox("Choose object", &currentIndex, keys.data(), static_cast<int>(keys.size())))
+    {
+        if (currentIndex >= 0 && currentIndex < static_cast<int>(keys.size()))
+        {
+            mainScene.ChosenObjectName = keys[currentIndex];
+            mainScene.UpdateChosenObject();
+        }
+    }
+    ImGui::Text(mainScene.ChosenObjectName.c_str());
+
+    ImGui::End();
+
+    if (mainScene.ChosenObject)
+    {
+
+        ImGui::Begin("Object Properties");
+        assert(mainScene.ChosenObject != nullptr);
+        Drawable& chosenObject = *mainScene.ChosenObject;
+
+        ImGui::Text("Selected object: %s", mainScene.ChosenObjectName.c_str());
+
+        glm::vec3 position = chosenObject.GetWorldPosition();
+        float pos[3] = { position.x, position.y, position.z };
+        glm::vec3 rotation = chosenObject.GetRotation();
+        float rot[3] = { rotation.x, rotation.y, rotation.z };
+        float scale = chosenObject.GetScale();
+
+        // Setting buttons... A little of spaghetti
+# pragma region Position changing
+        bool changedPosition = false;
+        if (ImGui::Button("-X"))
+        {
+            pos[0] -= 0.01f;
+            changedPosition = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("+X"))
+        {
+            pos[0] += 0.01f;
+            changedPosition = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("-Y"))
+        {
+            pos[1] -= 0.01f;
+            changedPosition = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("+Y"))
+        {
+            pos[1] += 0.01f;
+            changedPosition = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("-Z"))
+        {
+            pos[2] -= 0.01f;
+            changedPosition = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("+Z"))
+        {
+            pos[2] += 0.01f;
+            changedPosition = true;
+        }
+        if (changedPosition || ImGui::DragFloat3("Position", pos, 0.1f))
+        {
+            chosenObject.SetXPosition(pos[0]);
+            chosenObject.SetYPosition(pos[1]);
+            chosenObject.SetZPosition(pos[2]);
+        }
+# pragma endregion
+# pragma region Rotation changing
+        bool changedRotation = false;
+        if (ImGui::Button("-Xangle"))
+        {
+            rot[0] -= 0.5f;
+            changedRotation = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("+Xangle"))
+        {
+            rot[0] += 0.5f;
+            changedRotation = true;
+        }
+
+        if (ImGui::Button("-Yangle"))
+        {
+            rot[1] -= 0.5f;
+            changedRotation = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("+Yangle"))
+        {
+            rot[1] += 0.5f;
+            changedRotation = true;
+        }
+
+        if (ImGui::Button("-Zangle"))
+        {
+            rot[2] -= 0.5f;
+            changedRotation = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("+Zangle"))
+        {
+            rot[2] += 0.5f;
+            changedRotation = true;
+        }
+
+        if (changedRotation || ImGui::DragFloat3("Rotation", rot, 0.1f, 0.0f, 0.0f, "%.1f"))
+        {
+            chosenObject.SetXRotation(rot[0]);
+            chosenObject.SetYRotation(rot[1]);
+            chosenObject.SetZRotation(rot[2]);
+        }
+#pragma endregion
+# pragma region Scale changing
+        bool changedScale = false;
+        if (ImGui::Button("+scale"))
+        {
+            scale += 0.1f;
+            changedScale = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("-scale"))
+        {
+            scale -= 0.1f;
+            changedScale = true;
+        }
+        if (changedScale || ImGui::DragFloat("Scale", &scale, 0.1f, 0.0f, 0.0f, "%.1f"))
+        {
+            chosenObject.SetScale(scale);
+        }
+# pragma endregion
+        ImGui::End();
     }
 }

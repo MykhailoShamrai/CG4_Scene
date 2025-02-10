@@ -27,7 +27,8 @@ void Scene::AddCamera(const std::string& cameraName, const std::shared_ptr<Camer
 
     auto iteratorPair =  Cameras.insert({cameraName, camera});
     // Make inserted or already existing camera ass current
-    CurrentCamera = iteratorPair.first->second;
+    CurrentCameraName = cameraName;
+    UpdateSelectedCamera();
 }
 
 glm::mat4 Scene::GetViewMatrix()
@@ -42,12 +43,17 @@ void Scene::PrepareScene()
 {
     AddCamera("mainCamera", std::make_shared<Camera>());
     Cameras.at("mainCamera")->SetMovable(true);
+
+    AddCamera("secondCamera", std::make_shared<Camera>(glm::vec3(25.0f, 15.0f, 15.0f),
+        glm::vec3(0.0f, 0.1f, 0.0f), -90.0f, 0.0f));
+    Cameras.at("secondCamera")->updateCameraTarget(glm::vec3(0.0f, 0.0f, 0.0f));
+
+
     LoadModelToScene("../models/backpack/backpack.obj", "backpack");
     assert(Drawables.size() > 0);
     assert(Drawables.find("backpack") != Drawables.end());
     auto dr = Drawables.at("backpack");
     dr->SetZPosition(-15.0f);
-    dr->SetZRotation(35.0f);
 }
 
 void Scene::DrawObjects(const Shader& shader) const
@@ -57,3 +63,6 @@ void Scene::DrawObjects(const Shader& shader) const
         drawable.second->Draw(shader);
     }
 }
+
+void Scene::UpdateSelectedCamera() { CurrentCamera = Cameras.at(CurrentCameraName); }
+void Scene::UpdateChosenObject() { ChosenObject = Drawables.at(ChosenObjectName); }

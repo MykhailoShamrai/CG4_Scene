@@ -15,6 +15,7 @@ set(SOURCE_FILES
 		../third_party/imgui/imgui_demo.cpp
 		../third_party/imgui/imgui_tables.cpp
 		../third_party/imgui/imgui_widgets.cpp
+		../third_party/imgui/imgui_internal.h
 		# Another files
 		../window/window.cpp
 		../window/window.h

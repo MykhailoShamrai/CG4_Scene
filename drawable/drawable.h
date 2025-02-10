@@ -8,6 +8,16 @@
 class Drawable
 {
 public:
+    float GetXPosition() const;
+    float GetYPosition() const;
+    float GetZPosition() const;
+    float GetXRotation() const;
+    float GetYRotation() const;
+    float GetZRotation() const;
+    float GetScale() const;
+    glm::vec3 GetWorldPosition() const;
+    glm::vec3 GetRotation() const;
+
     void SetXPosition(float x);
     void SetYPosition(float y);
     void SetZPosition(float z);
