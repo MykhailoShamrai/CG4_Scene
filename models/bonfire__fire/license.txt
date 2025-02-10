@@ -1,0 +1,11 @@
+Model Information:
+* title:	Bonfire_ Fire
+* source:	https://sketchfab.com/3d-models/bonfire--fire-b5dd6e8a614a47928cbae0c6207b75f2
+* author:	komal3 (https://sketchfab.com/komal3)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Bonfire_ Fire" (https://sketchfab.com/3d-models/bonfire--fire-b5dd6e8a614a47928cbae0c6207b75f2) by komal3 (https://sketchfab.com/komal3) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
