@@ -32,6 +32,8 @@ public:
     void ProcessMouseScroll(float yoffset);
     bool GetMovable() const { return isMovable; }
     void SetMovable(const bool &val) { isMovable = val; }
+
+    glm::vec3 GetCameraPosition() { return cameraPosition; }
 private:
     glm::vec3 cameraPosition;
     // Direction

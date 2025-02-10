@@ -76,7 +76,7 @@ void Window::GameLoop()
     glm::mat4 proj =
         glm::perspective(glm::radians(45.0f), static_cast<float>(width) / static_cast<float>(height), 0.1f, 100.0f);
 
-    glClearColor(0.1f, 0.2f, 0.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     while (!glfwWindowShouldClose(window))
     {
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -97,6 +97,15 @@ void Window::GameLoop()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         mainShader.Use();
+        // Global lightning
+        mainShader.SetVec3("viewerPos", mainScene.CurrentCamera->GetCameraPosition());
+        mainShader.SetVec3("dirLight.direction", glm::vec3(0.0f, -1.0f, 0.0f));
+        mainShader.SetVec3("dirLight.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+        mainShader.SetVec3("dirLight.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+        mainShader.SetVec3("dirLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+
+
+        mainShader.SetMat4("projection", proj);
         glm::mat4 view = glm::mat4(1.0f);
         view           = mainScene.GetViewMatrix();
         mainShader.SetMat4("view", view);

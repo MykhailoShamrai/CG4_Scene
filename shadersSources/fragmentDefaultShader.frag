@@ -1,14 +1,56 @@
-#version 330
+#version 330 core
+struct Material
+{
+    sampler2D texture_diffuse1;
+    sampler2D texture_specular1;
+    float shininess;
+};
+
+struct DirLight
+{
+    vec3 direction;
+
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+
 out vec4 FragColor;
-
+in vec3 normal;
 in vec2 texCoord;
+in vec3 fragPos;
 
-uniform sampler2D texture_diffuse1;
-uniform sampler2D texture_diffuse2;
-uniform sampler2D texture_diffuse3;
-uniform sampler2D texture_specular1;
-uniform sampler2D texture_specular2;
+uniform DirLight dirLight;
+uniform Material material;
+uniform vec3 viewerPos;
+
+vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
+{
+    // Inverse, because we want have direction to light
+    vec3 lightDir = normalize(-light.direction);
+    // Cos from diffuse part
+    float diff = max(dot(normal, lightDir), 0.0f);
+    // TODO: Change when Blinn-Phong implementing
+    vec3 reflectDir = reflect(lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 1);
+    // Combine results
+    vec3 ambient = light.ambient * vec3(texture(material.texture_diffuse1, texCoord));
+
+    vec3 diffuse = light.diffuse * vec3(texture(material.texture_diffuse1, texCoord)) * diff;
+    // if (material.texture_specular1)
+    vec3 specular = light.specular * vec3(texture(material.texture_specular1, texCoord)) * spec;
+    //vec3 specular = light.specular * dirLight.specular * spec;
+
+    return (ambient + diffuse + specular);
+}
+
+
+
 void main()
 {
-    FragColor = texture(texture_diffuse1, texCoord);
+    // Normal vector
+    vec3 viewerDir = normalize(fragPos - viewerPos);
+    vec3 norm = normalize(normal);
+    vec3 result = CalcDirLight(dirLight, norm, viewerDir);
+    FragColor = vec4(result, 1.0);
 }
