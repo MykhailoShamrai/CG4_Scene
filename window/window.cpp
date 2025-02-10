@@ -68,14 +68,13 @@ void Window::GameLoop()
 {
     // Prepare start scene
     mainScene.PrepareScene();
-    // Main shaders
-    Shader mainShader = Shader("../shaders/vertexDefaultShader.vert", "../shaders/fragmentDefaultShader.frag");
 
     // Projection matrix. It is passed into shader in window functions, because width and height
     // depend on window configuration
     glm::mat4 proj =
         glm::perspective(glm::radians(45.0f), static_cast<float>(width) / static_cast<float>(height), 0.1f, 100.0f);
 
+    createShaders();
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     while (!glfwWindowShouldClose(window))
     {
@@ -96,6 +95,23 @@ void Window::GameLoop()
         processMovement(window);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        for (const auto &shader : shaders)
+        {
+            shader.second.Use();
+            shader.second.SetVec3("viewerPos", mainScene.CurrentCamera->GetCameraPosition());
+            shader.second.SetVec3("dirLight.direction", glm::vec3(0.0f, -1.0f, 0.0f));
+            shader.second.SetVec3("dirLight.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+            shader.second.SetVec3("dirLight.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+            shader.second.SetVec3("dirLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+
+            shader.second.SetMat4("projection", proj);
+            glm::mat4 view = glm::mat4(1.0f);
+            view           = mainScene.GetViewMatrix();
+            shader.second.SetMat4("view", view);
+            // Projection matrix is passed here.
+            shader.second.SetMat4("projection", proj);
+        }
+#if 0
         mainShader.Use();
         // Global lightning
         mainShader.SetVec3("viewerPos", mainScene.CurrentCamera->GetCameraPosition());
@@ -103,15 +119,9 @@ void Window::GameLoop()
         mainShader.SetVec3("dirLight.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
         mainShader.SetVec3("dirLight.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
         mainShader.SetVec3("dirLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+#endif
 
-
-        mainShader.SetMat4("projection", proj);
-        glm::mat4 view = glm::mat4(1.0f);
-        view           = mainScene.GetViewMatrix();
-        mainShader.SetMat4("view", view);
-        // Projection matrix is passed here.
-        mainShader.SetMat4("projection", proj);
-        mainScene.DrawObjects(mainShader);
+        mainScene.DrawObjects(shaders);
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -129,6 +139,20 @@ Window::~Window()
     glfwTerminate();
 }
 
+void Window::createShaders()
+{
+    shaders.insert( {"programModelTextures",
+        Shader("../shaders/vertexDefaultShader.vert",
+            "../shaders/fragmentModelWithSpecular.frag")});
+
+    shaders.insert( {"programModelWithoutSpecular",
+        Shader("../shaders/vertexDefaultShader.vert",
+            "../shaders/fragmentModelWithoutSpecular.frag")});
+
+    shaders.insert({"programMaterials",
+        Shader("../shaders/vertexDefaultShader.vert",
+        "../shaders/fragmentMaterial.frag")});
+}
 void Window::processMovement(GLFWwindow *window)
 {
     // TODO: Make that no all cameras can do it

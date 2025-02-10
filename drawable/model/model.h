@@ -6,6 +6,7 @@
 #include "shader.h"
 #include "assimp/material.h"
 
+
 /* Forward declarations */
 struct aiNode;
 struct aiScene;
@@ -16,7 +17,9 @@ class Model final : public virtual Drawable
 {
 public:
     Model(const std::string& path) { loadModel(path); };
-    void Draw(const Shader& shader) override;
+    void Draw(const std::unordered_map<std::string, Shader> &shaders) override;
+    void SetCustomMaterial(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess) override;
+    void SetSpecularAndShininess(const glm::vec3 &specular, const float &shininess) override;
 
 private:
     std::vector<Mesh> meshes;
@@ -26,6 +29,7 @@ private:
     void loadModel(std::string path);
     void processNode(aiNode *node, const aiScene *scene);
     Mesh processMesh(aiMesh *mesh, const aiScene *scene);
+    Material loadMaterial(aiMaterial* mat);
     std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
 };
 

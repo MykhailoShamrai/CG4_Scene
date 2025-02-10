@@ -7,12 +7,28 @@
 #include "assimp/scene.h"
 #include "textureLoader.h"
 
-void Model::Draw(const Shader &shader)
+void Model::Draw(const std::unordered_map<std::string, Shader> &shaders)
 {
-    setTransformationsForDrawable(shader);
+    setTransformationsForDrawable(shaders);
     for (auto &mesh : meshes)
     {
-        mesh.Draw(shader);
+        mesh.Draw(shaders);
+    }
+}
+void Model::SetCustomMaterial(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess)
+{
+    Drawable::SetCustomMaterial(ambient, diffuse, specular, shininess);
+    for (auto &mesh : meshes)
+    {
+        mesh.Material_ = customMaterial;
+    }
+}
+void Model::SetSpecularAndShininess(const glm::vec3 &specular, const float &shininess)
+{
+    Drawable::SetSpecularAndShininess(specular, shininess);
+    for (auto &mesh : meshes)
+    {
+        mesh.Material_ = customMaterial;
     }
 }
 
@@ -82,30 +98,53 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType 
     return textures;
 }
 
+Material Model::loadMaterial(aiMaterial *mat)
+{
+    Material material;
+    aiColor3D color(0.0f, 0.0f, 0.0f);
+    float shininess;
+
+    mat->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+    material.Diffuse = glm::vec3(color.r, color.b, color.g);
+
+    mat->Get(AI_MATKEY_COLOR_AMBIENT, color);
+    material.Ambient = glm::vec3(color.r, color.b, color.g);
+
+    mat->Get(AI_MATKEY_COLOR_SPECULAR, color);
+    material.Specular = glm::vec3(color.r, color.b, color.g);
+
+    mat->Get(AI_MATKEY_SHININESS, shininess);
+    material.Shininess = shininess;
+
+    return material;
+}
+
 Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
 
+    Material mat;
+
     // All vertices of a mesh to vector
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
         Vertex vertex;
         glm::vec3 vector;
-        vector.x = mesh->mVertices[i].x;
-        vector.y = mesh->mVertices[i].y;
-        vector.z = mesh->mVertices[i].z;
+        vector.x        = mesh->mVertices[i].x;
+        vector.y        = mesh->mVertices[i].y;
+        vector.z        = mesh->mVertices[i].z;
         vertex.Position = vector;
-        vector.x = mesh->mNormals[i].x;
-        vector.y = mesh->mNormals[i].y;
-        vector.z = mesh->mNormals[i].z;
-        vertex.Normal = vector;
-        if (mesh->mTextureCoords[0]) // Only if mesh contains texture coords
+        vector.x        = mesh->mNormals[i].x;
+        vector.y        = mesh->mNormals[i].y;
+        vector.z        = mesh->mNormals[i].z;
+        vertex.Normal   = vector;
+        if (mesh->mTextureCoords[0])  // Only if mesh contains texture coords
         {
             glm::vec2 vec;
-            vec.x = mesh->mTextureCoords[0][i].x;
-            vec.y = mesh->mTextureCoords[0][i].y;
+            vec.x            = mesh->mTextureCoords[0][i].x;
+            vec.y            = mesh->mTextureCoords[0][i].y;
             vertex.TexCoords = vec;
         }
         else
@@ -126,18 +165,21 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     // Process material
     if (mesh->mMaterialIndex >= 0)
     {
-        aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-        std::vector<Texture> diffuseMaps = loadMaterialTextures(material,
-            aiTextureType_DIFFUSE, "texture_diffuse");
+        aiMaterial *material             = scene->mMaterials[mesh->mMaterialIndex];
+        std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
 
         textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-        std::vector<Texture> specularMaps = loadMaterialTextures(material,
-                aiTextureType_SPECULAR, "texture_specular");
+        std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-    }
 
-    return Mesh(vertices, indices, textures);
+        mat = loadMaterial(material);
+    }
+    // In both situations - custom color and only shininess passed, shininess will be != -1.0f
+    // if (customMaterial.IsCustom)
+       // mat = customMaterial;
+    return Mesh(vertices, indices, textures, mat);
 }
+
 
 
 

@@ -29,8 +29,25 @@ void Drawable::SetScale(float sc)
     scale.y = sc;
     scale.z = sc;
 }
+
 Drawable::~Drawable() = default;
-void Drawable::Draw(const Shader &shader) { throw std::logic_error("Drawable::Draw() is not implemented"); }
+
+void Drawable::Draw(const std::unordered_map<std::string, Shader> &shaders)
+{
+    throw std::logic_error("Drawable::Draw() is not implemented");
+}
+
+void Drawable::SetSpecularAndShininess(const glm::vec3 &specular, const float &shininess)
+{
+    customMaterial.Specular = specular;
+    customMaterial.Shininess = shininess;
+}
+
+void Drawable::SetCustomMaterial(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess)
+{
+    customMaterial = Material{ ambient, diffuse, specular, shininess, true };
+}
+
 glm::mat4 Drawable::createModelMatrix()
 {
     glm::mat4 modelMatrix = glm::mat4(1.0f);
@@ -49,11 +66,14 @@ glm::mat4 Drawable::createModelMatrix()
     return modelMatrix;
 }
 
-void Drawable::setTransformationsForDrawable(const Shader &shader)
+void Drawable::setTransformationsForDrawable(const std::unordered_map<std::string, Shader> &shaders)
 {
     glm::mat4 modelMatrix = createModelMatrix();
-    // TODO: Also pass an inversed matrix for normal vectors
     glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(modelMatrix)));
-    shader.SetMat4("model", modelMatrix);
-    shader.SetMat3("normalMatrix", normalMatrix);
+    for (const auto &shader : shaders)
+    {
+        shader.second.Use();
+        shader.second.SetMat4("model", modelMatrix);
+        shader.second.SetMat3("normalMatrix", normalMatrix);
+    }
 }

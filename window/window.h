@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <string>
+#include <vector>
 
 #include "../scene/scene.h"
 class Window
@@ -23,9 +24,12 @@ private:
     float lastX;
     float lastY;
 
+    std::unordered_map<std::string, Shader> shaders =
+        std::unordered_map<std::string, Shader>();
     // Main scene that should be visible
     Scene mainScene = Scene();
 
+    void createShaders();
     void processMovement(GLFWwindow* window);
     void mouse_callback(GLFWwindow* window, double xpos, double ypos);
     void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);

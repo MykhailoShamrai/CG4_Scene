@@ -26,7 +26,7 @@ public:
     void AddCamera(const std::string& cameraName, const std::shared_ptr<Camera>& camera);
     void LoadModelToScene(const std::string& fullPath, const std::string& modelName);
     void PrepareScene();
-    void DrawObjects(const Shader& shader) const;
+    void DrawObjects(const std::unordered_map<std::string, Shader>& shaders) const;
     void UpdateSelectedCamera();
     void UpdateChosenObject();
     glm::mat4 GetViewMatrix();

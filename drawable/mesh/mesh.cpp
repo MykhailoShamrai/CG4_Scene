@@ -41,13 +41,15 @@ void Mesh::SetupMesh()
 }
 
 Mesh::Mesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &indices,
-    const std::vector<Texture> &textures):
-    Vertices(vertices), Indices(indices), Textures(textures) { SetupMesh(); }
+    const std::vector<Texture> &textures, const Material& material):
+    Vertices(vertices), Indices(indices), Textures(textures), Material_(material) { SetupMesh(); }
 
-void Mesh::Draw(const Shader &shader)
+void Mesh::Draw(const std::unordered_map<std::string, Shader> &shaders)
 {
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;
+    bool useTexture = false;
+    bool useSpecular = false;
     for (unsigned int i = 0; i < Textures.size(); i++)
     {
         glActiveTexture(GL_TEXTURE0 + i);
@@ -56,14 +58,50 @@ void Mesh::Draw(const Shader &shader)
         if (name == "texture_diffuse")
         {
             number = std::to_string(diffuseNr++);
+            useTexture = true;
         }
         else if (name == "texture_specular")
         {
             number = std::to_string(specularNr++);
+            useSpecular = true;
         }
 
-        shader.SetInt("material." + name + number, i);
         glBindTexture(GL_TEXTURE_2D, Textures[i].Id);
+    }
+    Shader shader = shaders.at("programModelTextures");
+    shader.Use();
+    if (useTexture && !Material_.IsCustom)
+    {
+        // If there is texture, also it has specular map
+        if (useSpecular)
+        {
+            for (unsigned int i = 0; i < specularNr; i++)
+            {
+                shader.SetInt("material.texture_specular" + std::to_string(i+1), i);
+            }
+        }
+        // If there is a texture but not specular map. We should use material defined
+        else
+        {
+            shader = shaders.at("programModelWithoutSpecular");
+            shader.Use();
+            shader.SetVec3("material.specular", Material_.Specular);
+            shader.SetFloat("material.shininess", Material_.Shininess);
+        }
+        for (unsigned int i = 0; i < diffuseNr; i++)
+        {
+            shader.SetInt("material.texture_diffuse" + std::to_string(i+1), i);
+        }
+    }
+    // If there is no texture, but only material or material is customly defined
+    else
+    {
+        shader = shaders.at("programMaterials");
+        shader.Use();
+        shader.SetVec3("material.ambient", Material_.Ambient);
+        shader.SetVec3("material.diffuse", Material_.Diffuse);
+        shader.SetVec3("material.specular", Material_.Specular);
+        shader.SetFloat("material.shininess", Material_.Shininess);
     }
     glActiveTexture(GL_TEXTURE0);
 
