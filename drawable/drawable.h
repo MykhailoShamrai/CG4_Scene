@@ -1,7 +1,9 @@
 #ifndef DRAWABLE_H
 #define DRAWABLE_H
+#include <memory>
 #include <unordered_map>
 
+#include "../animator/animatorBase.h"
 #include "shader.h"
 
 struct Material {
@@ -38,6 +40,8 @@ public:
     virtual void Draw(const std::unordered_map<std::string, Shader> &shaders);
     virtual void SetCustomMaterial(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess);
     virtual void SetSpecularAndShininess(const glm::vec3 &specular, const float &shininess);
+    void Animate(float timeElapsed);
+    void SetAnimated(const std::shared_ptr<AnimatorBase> &animator);
 protected:
     // Three numbers for position in world space
     glm::vec3 worldPosition = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -47,6 +51,7 @@ protected:
     // First element of vector -> rotation around x
     // Second element -> rotation around y
     // Third element -> rotation around z
+    std::shared_ptr<AnimatorBase> animator = nullptr;
     glm::mat4 createModelMatrix();
     void setTransformationsForDrawable(const std::unordered_map<std::string, Shader> &shaders);
 };

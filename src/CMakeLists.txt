@@ -40,7 +40,10 @@ set(SOURCE_FILES
 		../lights/BindLight.h
 		../lights/spotLight.cpp
 		../lights/pointLight.cpp
-		../lights/bindLight.cpp)
+		../lights/bindLight.cpp
+		../animator/animatorBase.h
+		../animator/ufoAnimator.h
+		../animator/UFOAnimator.cpp)
 
 add_executable (CG4_Scene "main.cpp" ${SOURCE_FILES})
 

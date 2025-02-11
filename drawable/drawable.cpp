@@ -39,8 +39,18 @@ void Drawable::Draw(const std::unordered_map<std::string, Shader> &shaders)
 
 void Drawable::SetSpecularAndShininess(const glm::vec3 &specular, const float &shininess)
 {
-    customMaterial.Specular = specular;
+    customMaterial.Specular  = specular;
     customMaterial.Shininess = shininess;
+}
+void Drawable::Animate(float timeElapsed)
+{
+    if (animator != nullptr)
+        animator->Animate(timeElapsed, *this);
+}
+
+void Drawable::SetAnimated(const std::shared_ptr<AnimatorBase> &animator)
+{
+    this->animator = animator;
 }
 
 void Drawable::SetCustomMaterial(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess)

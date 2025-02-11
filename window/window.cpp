@@ -93,6 +93,10 @@ void Window::GameLoop()
 
         // Input for camera
         processMovement(window);
+        for (const auto &drawable: mainScene.Drawables)
+        {
+            drawable.second->Animate(deltaTime);
+        }
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         for (const auto &light: mainScene.Lights)

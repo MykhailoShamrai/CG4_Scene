@@ -4,6 +4,7 @@
 #include <ostream>
 #include <utility>
 
+#include "../animator/UFOAnimator.h"
 #include "../lights/pointLight.h"
 #include "../lights/spotLight.h"
 #include "glm/gtx/integer.hpp"
@@ -69,6 +70,10 @@ glm::mat4 Scene::GetViewMatrix()
 
 void Scene::PrepareScene()
 {
+    auto basePtr = std::make_shared<AnimatorBase>();
+    auto UfoAnimatorPointer = std::make_shared<UFOAnimator>();
+    basePtr = std::static_pointer_cast<AnimatorBase>(UfoAnimatorPointer);
+
     AddCamera("mainCamera", std::make_shared<Camera>());
     Cameras.at("mainCamera")->SetMovable(true);
 
@@ -89,7 +94,8 @@ void Scene::PrepareScene()
     AddCamera(
         "secondCamera",
         std::make_shared<Camera>(
-            glm::vec3(25.0f, 15.0f, 15.0f), glm::vec3(0.0f, 0.1f, 0.0f), -90.0f, 0.0f
+            glm::vec3(25.0f, 15.0f, 15.0f), glm::vec3(0.0f, 0.1f, 0.0f),
+            -90.0f, 0.0f
         )
     );
     Cameras.at("secondCamera")->updateCameraTarget(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -114,6 +120,7 @@ void Scene::PrepareScene()
     ufo->SetYPosition(7.91f);
     ufo->SetXRotation(-90.0f);
     ufo->SetScale(2.8f);
+    ufo->SetAnimated(basePtr);
 
     sp1->BindToObject(ufo);
     sp1->ChangePositionToObject();
@@ -197,6 +204,21 @@ void Scene::PrepareScene()
 
     pl1->BindToObject(fire);
     pl1->ChangePositionToObject();
+
+
+    AddPointLight(
+    "pointLight1", glm::vec3(0.f, 0.f, 0.f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0, 1.0f, 1.0f),
+    glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1
+    );
+    auto pl2 = Lights.at("pointLight1");
+    LoadModelToScene("../models/sphere/scene.gltf", "sphere1");
+    auto sphere = Drawables.at("sphere1");
+    sphere->SetXPosition(4.0f);
+    sphere->SetYPosition(-6.5f);
+    sphere->SetZPosition(6.0f);
+    sphere->SetScale(0.1f);
+    pl2->BindToObject(sphere);
+    pl2->ChangePositionToObject();
 }
 
 void Scene::DrawObjects(const std::unordered_map<std::string, Shader>& shaders) const
