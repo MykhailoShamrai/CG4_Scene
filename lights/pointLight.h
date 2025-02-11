@@ -19,7 +19,7 @@ struct PointLight: BindLight
     glm::vec3 Specular;
 
     unsigned int Number = 0;
-    std::unique_ptr<Drawable> object = nullptr;
+    std::shared_ptr<Drawable> object = nullptr;
     void ChangePositionToObject() override;
     void BindToObject(const std::shared_ptr<Drawable>& ptr) override;
     void UseInShader(const Shader &shader) override;

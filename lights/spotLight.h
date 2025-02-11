@@ -21,7 +21,7 @@ struct SpotLight: public BindLight
 
     unsigned int Number = 0;
     // Object with which a light can be bind
-    std::unique_ptr <Drawable> object = nullptr;
+    std::shared_ptr <Drawable> object = nullptr;
     SpotLight(glm::vec3 position,
         glm::vec3 direction,
         glm::vec3 ambient,

@@ -33,19 +33,19 @@ void SpotLight::ChangePositionToObject()
 
 void SpotLight::BindToObject(const std::shared_ptr<Drawable> &ptr)
 {
-    object = std::make_unique<Drawable>(*ptr);
+    object = ptr;
 }
 
 void SpotLight::UseInShader(const Shader &shader)
 {
-    std::string identifire = "spot_light[" + std::to_string(Number) + "]";
+    std::string identifier = "spotLights[" + std::to_string(Number) + "]";
     shader.Use();
-    shader.SetVec3(identifire + ".position", Position);
-    shader.SetVec3(identifire + ".direction", DirectionAfter);
+    shader.SetVec3(identifier + ".position", Position);
+    shader.SetVec3(identifier + ".direction", DirectionAfter);
 
-    shader.SetVec3(identifire + ".ambient", Ambient);
-    shader.SetVec3(identifire + ".diffuse", Diffuse);
-    shader.SetVec3(identifire + ".specular", Specular);
+    shader.SetVec3(identifier + ".ambient", Ambient);
+    shader.SetVec3(identifier + ".diffuse", Diffuse);
+    shader.SetVec3(identifier + ".specular", Specular);
 
-    shader.SetFloat(identifire + ".cutOff", cutOff);
+    shader.SetFloat(identifier + ".cutOff", cutOff);
 }

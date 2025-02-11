@@ -5,19 +5,19 @@ void PointLight::ChangePositionToObject()
     if (object != nullptr)
         Position = this->object->GetWorldPosition();
 }
-void PointLight::BindToObject(const std::shared_ptr<Drawable> &ptr) { object = std::make_unique<Drawable>(*ptr); }
+void PointLight::BindToObject(const std::shared_ptr<Drawable> &ptr) { object = ptr; }
 
 void PointLight::UseInShader(const Shader &shader)
 {
-    std::string identifire = "point_light[" + std::to_string(Number) + "]";
+    std::string identifier = "pointLights[" + std::to_string(Number) + "]";
     shader.Use();
-    shader.SetVec3(identifire + ".position", Position);
-    shader.SetFloat(identifire + ".constant", Constant);
-    shader.SetFloat(identifire + ".linear", Linear);
-    shader.SetFloat(identifire + ".quadratic", Quadratic);
-    shader.SetVec3(identifire + ".ambient", Ambient);
-    shader.SetVec3(identifire + ".diffuse", Diffuse);
-    shader.SetVec3(identifire + ".specular", Specular);
+    shader.SetVec3(identifier + ".position", Position);
+    shader.SetFloat(identifier + ".constant", Constant);
+    shader.SetFloat(identifier + ".linear", Linear);
+    shader.SetFloat(identifier + ".quadratic", Quadratic);
+    shader.SetVec3(identifier + ".ambient", Ambient);
+    shader.SetVec3(identifier + ".diffuse", Diffuse);
+    shader.SetVec3(identifier + ".specular", Specular);
 }
 PointLight::PointLight(
     glm::vec3 position, float constant, float linear, float quadratic, glm::vec3 ambient, glm::vec3 diffuse,

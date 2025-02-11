@@ -102,6 +102,10 @@ void Window::GameLoop()
 
         for (const auto &shader : shaders)
         {
+            for (const auto &light: mainScene.Lights)
+            {
+                light.second->UseInShader(shader.second);
+            }
             shader.second.Use();
             shader.second.SetVec3("viewerPos", mainScene.CurrentCamera->GetCameraPosition());
             shader.second.SetVec3("dirLight.direction", mainScene.DirectionalLight.Direction);
