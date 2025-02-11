@@ -14,10 +14,10 @@ void SpotLight::ChangePositionToObject()
     // of the object for which we are bounded to dir vector
     if (object != nullptr)
     {
-        glm::vec3 pos    = this->object->GetWorldPosition();
+        this->Position = this->object->GetWorldPosition();
         glm::vec3 rot    = this->object->GetRotation();
         glm::mat4 matrix = glm::mat4(1.0f);
-        matrix           = glm::translate(matrix, pos);
+        //matrix           = glm::translate(matrix, pos);
         float xAngle     = rot.x;
         float yAngle     = rot.y;
         float zAngle     = rot.z;
@@ -47,5 +47,5 @@ void SpotLight::UseInShader(const Shader &shader)
     shader.SetVec3(identifier + ".diffuse", Diffuse);
     shader.SetVec3(identifier + ".specular", Specular);
 
-    shader.SetFloat(identifier + ".cutOff", cutOff);
+    shader.SetFloat(identifier + ".cutOff", glm::cos(glm::radians(cutOff)));
 }
