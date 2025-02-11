@@ -37,8 +37,10 @@ set(SOURCE_FILES
 		../lights/dirLight.h
 		../lights/pointLight.h
 		../lights/spotLight.h
-		../lights/bindedLight.h
-		../lights/spotLight.cpp)
+		../lights/BindLight.h
+		../lights/spotLight.cpp
+		../lights/pointLight.cpp
+		../lights/bindLight.cpp)
 
 add_executable (CG4_Scene "main.cpp" ${SOURCE_FILES})
 

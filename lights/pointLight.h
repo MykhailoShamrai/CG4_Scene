@@ -2,28 +2,29 @@
 #define POINTLIGHT_H
 #include <memory>
 
-#include "bindedLight.h"
+#include "BindLight.h"
 #include "drawable.h"
 #include "glm/detail/type_vec.hpp"
 
-struct PointLight: BindedLight
+struct PointLight: BindLight
 {
     glm::vec3 Position;
 
-    glm::vec3 Constant;
-    glm::vec3 Linear;
-    glm::vec3 Quadratic;
+    float Constant;
+    float Linear;
+    float Quadratic;
 
     glm::vec3 Ambient;
     glm::vec3 Diffuse;
     glm::vec3 Specular;
 
+    unsigned int Number = 0;
     std::unique_ptr<Drawable> object = nullptr;
-    void ChangePositionToObject() override
-    {
-        if (object != nullptr)
-            Position = this->object->GetWorldPosition();
-    };
+    void ChangePositionToObject() override;
+    void BindToObject(const std::shared_ptr<Drawable>& ptr) override;
+    void UseInShader(const Shader &shader) override;
+    PointLight(glm::vec3 position, float constant, float linear, float quadratic,
+        glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, unsigned int number);
 };
 
 #endif //POINTLIGHT_H

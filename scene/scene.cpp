@@ -4,6 +4,8 @@
 #include <ostream>
 #include <utility>
 
+#include "../lights/pointLight.h"
+#include "../lights/spotLight.h"
 #include "glm/gtx/integer.hpp"
 #include "model.h"
 #include "stb_image.h"
@@ -24,11 +26,35 @@ void Scene::LoadModelToScene(const std::string& fullPath, const std::string& mod
     }
 }
 
+void Scene::AddSpotLight(
+    const std::string& lightName, const glm::vec3& position, const glm::vec3& direction,
+    const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular,
+    const float& cutOff, unsigned int number
+)
+{
+    Lights.insert(
+        {lightName, std::make_shared<SpotLight>(
+                        position, direction, ambient, diffuse, specular, cutOff, number
+                    )}
+    );
+}
+void Scene::AddPointLight(
+    const std::string& lightName, glm::vec3 position, float constant, float linear, float quadratic,
+    glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, unsigned int number
+)
+{
+    Lights.insert(
+        {lightName, std::make_shared<PointLight>(
+                        position, constant, linear, quadratic, ambient, diffuse, specular, number
+                    )}
+    );
+}
+
 void Scene::AddCamera(const std::string& cameraName, const std::shared_ptr<Camera>& camera)
 {
     std::cout << "Adding camera to scene" << std::endl;
 
-    auto iteratorPair =  Cameras.insert({cameraName, camera});
+    auto iteratorPair = Cameras.insert({cameraName, camera});
     // Make inserted or already existing camera ass current
     CurrentCameraName = cameraName;
     UpdateSelectedCamera();
@@ -47,10 +73,26 @@ void Scene::PrepareScene()
     AddCamera("mainCamera", std::make_shared<Camera>());
     Cameras.at("mainCamera")->SetMovable(true);
 
-    AddCamera("secondCamera", std::make_shared<Camera>(glm::vec3(25.0f, 15.0f, 15.0f),
-        glm::vec3(0.0f, 0.1f, 0.0f), -90.0f, 0.0f));
-    Cameras.at("secondCamera")->updateCameraTarget(glm::vec3(0.0f, 0.0f, 0.0f));
+    AddSpotLight(
+        "spotLight0", glm::vec3(0.f, 0.f, 0.f), glm::vec3(-1.f, 0.f, 0.f),
+        glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 30.0,
+        0
+    );
+    auto sp1 = Lights.at("spotLight0");
 
+    AddPointLight(
+        "pointLight0", glm::vec3(0.f, 0.f, 0.f), 1.0f, 0.09f, 0.032f, glm::vec3(0.2f, 0.2f, 0.2f),
+        glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 0
+    );
+    auto pl1 = Lights.at("pointLight0");
+
+    AddCamera(
+        "secondCamera",
+        std::make_shared<Camera>(
+            glm::vec3(25.0f, 15.0f, 15.0f), glm::vec3(0.0f, 0.1f, 0.0f), -90.0f, 0.0f
+        )
+    );
+    Cameras.at("secondCamera")->updateCameraTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 
     stbi_set_flip_vertically_on_load(true);
     LoadModelToScene("../models/backpack/backpack.obj", "backpack1");
@@ -72,6 +114,9 @@ void Scene::PrepareScene()
     ufo->SetYPosition(7.91f);
     ufo->SetXRotation(-90.0f);
     ufo->SetScale(2.8f);
+
+    sp1->BindToObject(ufo);
+    sp1->ChangePositionToObject();
 
     LoadModelToScene("../models/grass_field/scene.gltf", "grass1");
     auto grass = Drawables.at("grass1");
@@ -115,7 +160,7 @@ void Scene::PrepareScene()
     pine->SetXPosition(4.3f);
     pine->SetYPosition(-7.2f);
     pine->SetXRotation(-90.0f);
-    //pine->SetYRotation(-100.0f);
+    // pine->SetYRotation(-100.0f);
     pine->SetScale(0.94f);
     pine->SetSpecularAndShininess(glm::vec3(0.1f, 0.15f, 0.1f), 30.0f);
 
@@ -150,6 +195,8 @@ void Scene::PrepareScene()
     fire->SetZPosition(-2.93f);
     fire->SetScale(0.5f);
 
+    pl1->BindToObject(fire);
+    pl1->ChangePositionToObject();
 }
 
 void Scene::DrawObjects(const std::unordered_map<std::string, Shader>& shaders) const

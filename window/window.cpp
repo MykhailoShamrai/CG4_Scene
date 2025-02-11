@@ -95,6 +95,11 @@ void Window::GameLoop()
         processMovement(window);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        for (const auto &light: mainScene.Lights)
+        {
+            light.second->ChangePositionToObject();
+        }
+
         for (const auto &shader : shaders)
         {
             shader.second.Use();
@@ -111,15 +116,7 @@ void Window::GameLoop()
             // Projection matrix is passed here.
             shader.second.SetMat4("projection", proj);
         }
-#if 0
-        mainShader.Use();
-        // Global lightning
-        mainShader.SetVec3("viewerPos", mainScene.CurrentCamera->GetCameraPosition());
-        mainShader.SetVec3("dirLight.direction", glm::vec3(0.0f, -1.0f, 0.0f));
-        mainShader.SetVec3("dirLight.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-        mainShader.SetVec3("dirLight.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
-        mainShader.SetVec3("dirLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-#endif
+
 
         mainScene.DrawObjects(shaders);
 

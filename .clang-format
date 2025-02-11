@@ -1,7 +1,7 @@
 BasedOnStyle: Google
 AccessModifierOffset: -4
 IndentWidth: 4
-ColumnLimit: 120
+ColumnLimit: 100
 BreakBeforeBraces: Allman
 BreakConstructorInitializersBeforeComma: false
 AllowShortIfStatementsOnASingleLine: false
