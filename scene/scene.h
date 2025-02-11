@@ -6,6 +6,8 @@
 #include <unordered_map>
 
 #include "../camera/camera.h"
+#include "../lights/bindedLight.h"
+#include "../lights/dirLight.h"
 #include "drawable.h"
 
 class Scene
@@ -17,11 +19,25 @@ public:
     std::shared_ptr<Drawable> ChosenObject;
     std::string ChosenObjectName;
 
-    // Set of cameras on scene
+    // Map of cameras on scene
     std::pmr::unordered_map<std::string, std::shared_ptr<Camera>> Cameras =
         std::pmr::unordered_map<std::string, std::shared_ptr<Camera>>();
     std::shared_ptr<Camera> CurrentCamera;
     std::string CurrentCameraName;
+
+    // Map of lights on scene
+    std::pmr::unordered_map<std::string, std::shared_ptr<BindedLight>> Lights;
+    std::shared_ptr<BindedLight> CurrentLight;
+    std::string CurrentLightName;
+
+    // Global Direction light
+    DirLight DirectionalLight = DirLight
+    {
+        glm::vec3(0.0f, -1.0f, 0.0f),
+        glm::vec3(0.2f, 0.2f, 0.2f),
+        glm::vec3(0.5f, 0.5f, 0.5f),
+        glm::vec3(1.0f, 1.0f, 1.0f)
+    };
 
     void AddCamera(const std::string& cameraName, const std::shared_ptr<Camera>& camera);
     void LoadModelToScene(const std::string& fullPath, const std::string& modelName);

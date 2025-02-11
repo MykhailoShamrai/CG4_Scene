@@ -99,10 +99,10 @@ void Window::GameLoop()
         {
             shader.second.Use();
             shader.second.SetVec3("viewerPos", mainScene.CurrentCamera->GetCameraPosition());
-            shader.second.SetVec3("dirLight.direction", glm::vec3(0.0f, -1.0f, 0.0f));
-            shader.second.SetVec3("dirLight.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-            shader.second.SetVec3("dirLight.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
-            shader.second.SetVec3("dirLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+            shader.second.SetVec3("dirLight.direction", mainScene.DirectionalLight.Direction);
+            shader.second.SetVec3("dirLight.ambient", mainScene.DirectionalLight.Ambient);
+            shader.second.SetVec3("dirLight.diffuse", mainScene.DirectionalLight.Diffuse);
+            shader.second.SetVec3("dirLight.specular", mainScene.DirectionalLight.Specular);
 
             shader.second.SetMat4("projection", proj);
             glm::mat4 view = glm::mat4(1.0f);

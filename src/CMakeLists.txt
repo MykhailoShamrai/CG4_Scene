@@ -33,7 +33,12 @@ set(SOURCE_FILES
 		../third_party/headers/stb_image.h
 		../drawable/drawable.cpp
 		../camera/camera.h
-		../camera/camera.cpp)
+		../camera/camera.cpp
+		../lights/dirLight.h
+		../lights/pointLight.h
+		../lights/spotLight.h
+		../lights/bindedLight.h
+		../lights/spotLight.cpp)
 
 add_executable (CG4_Scene "main.cpp" ${SOURCE_FILES})
 
