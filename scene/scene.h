@@ -46,6 +46,7 @@ public:
         const glm::vec3& diffuse,
         const glm::vec3& specular,
         const float& cutOff,
+        const float& outerCutOff,
         unsigned int number);
 
     void AddPointLight(const std::string& lightName,

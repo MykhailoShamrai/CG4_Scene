@@ -29,12 +29,11 @@ void Scene::LoadModelToScene(const std::string& fullPath, const std::string& mod
 void Scene::AddSpotLight(
     const std::string& lightName, const glm::vec3& position, const glm::vec3& direction,
     const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular,
-    const float& cutOff, unsigned int number
-)
+    const float& cutOff, const float& outerCutOff,unsigned int number)
 {
     Lights.insert(
         {lightName, std::make_shared<SpotLight>(
-                        position, direction, ambient, diffuse, specular, cutOff, number
+                        position, direction, ambient, diffuse, specular, cutOff, outerCutOff, number
                     )}
     );
 }
@@ -75,7 +74,8 @@ void Scene::PrepareScene()
 
     AddSpotLight(
         "spotLight0", glm::vec3(0.03f, 7.91f, 0.f), glm::vec3(0.f, 0.f, -1.f),
-        glm::vec3(0.1f, 0.3f, 0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.2f, 1.0f, 0.2f), 12.5,
+        glm::vec3(0.1f, 0.3f, 0.1f), glm::vec3(0.0f, 1.0f, 0.0f),
+        glm::vec3(0.2f, 1.0f, 0.2f), 12.5, 15.0,
         0
     );
     auto sp1 = Lights.at("spotLight0");

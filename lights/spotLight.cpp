@@ -4,9 +4,10 @@
 #include "spotLight.h"
 
 SpotLight::SpotLight(glm::vec3 position, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular,
-    float cutOff, unsigned int number):
+    float cutOff, float outerCutOff, unsigned int number):
     Position(position), Direction(direction), DirectionAfter(direction),
-    Ambient(ambient), Diffuse(diffuse), Specular(specular), cutOff(cutOff), Number(number){}
+    Ambient(ambient), Diffuse(diffuse), Specular(specular), cutOff(cutOff), Number(number),
+    outerCutOff(outerCutOff){}
 
 void SpotLight::ChangePositionToObject()
 {
@@ -48,4 +49,5 @@ void SpotLight::UseInShader(const Shader &shader)
     shader.SetVec3(identifier + ".specular", Specular);
 
     shader.SetFloat(identifier + ".cutOff", glm::cos(glm::radians(cutOff)));
+    shader.SetFloat(identifier + ".outerCutOff", glm::cos(glm::radians(outerCutOff)));
 }

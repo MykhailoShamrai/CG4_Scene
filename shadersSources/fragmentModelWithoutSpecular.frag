@@ -40,6 +40,7 @@ struct SpotLight
     vec3 diffuse;
     vec3 specular;
     float cutOff;
+    float outerCutOff;
 };
 #define NUMBER_SPOT_LIGHTS 1
 uniform SpotLight spotLights[NUMBER_SPOT_LIGHTS];
@@ -114,14 +115,15 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     vec3 materialSpecular = vec3(material.specular);
     float shininess = material.shininess;
     float theta = dot(lightDir, normalize(-light.direction));
-
+    float epsilon = light.cutOff - light.outerCutOff;
+    float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
     LightResult res;
     vec3 resultingColor;
-    if (theta > light.cutOff)
+    if (theta > light.outerCutOff)
     {
         res = LightCalculation(light.ambient, light.diffuse, light.specular, normal,
                                        materialDiffuse, materialDiffuse, materialSpecular, shininess, lightDir, viewDir);
-        resultingColor = (res.ambient + res.diffuse + res.specular);
+        resultingColor = (res.ambient + res.diffuse * intensity + res.specular * intensity);
     }
     else
     {

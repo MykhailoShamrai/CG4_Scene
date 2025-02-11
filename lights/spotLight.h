@@ -18,6 +18,7 @@ struct SpotLight: public BindLight
     glm::vec3 Diffuse;
     glm::vec3 Specular;
     float cutOff;
+    float outerCutOff;
 
     unsigned int Number = 0;
     // Object with which a light can be bind
@@ -28,6 +29,7 @@ struct SpotLight: public BindLight
         glm::vec3 diffuse,
         glm::vec3 specular,
         float cutOff,
+        float outerCutOff,
         unsigned int number);
 
     void ChangePositionToObject() override;
