@@ -227,6 +227,7 @@ void Scene::PrepareScene()
     "pointLight1", glm::vec3(0.f, 0.f, 0.f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0, 1.0f, 1.0f),
     glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1
     );
+
     auto pl2 = Lights.at("pointLight1");
     LoadModelToScene("../models/sphere/scene.gltf", "sphere1");
     auto sphere = Drawables.at("sphere1");
@@ -236,6 +237,11 @@ void Scene::PrepareScene()
     sphere->SetScale(0.1f);
     pl2->BindToObject(sphere);
     pl2->ChangePositionToObject();
+
+    LoadModelToScene("../models/sphere/scene.gltf", "sphereChrome");
+    sphere = Drawables.at("sphereChrome");
+    sphere->SetCustomMaterial(glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.4f, 0.4f, 0.4f),
+        glm::vec3(0.774597f, 0.774597f, 0.774597f), 0.6 * 128);
 }
 
 void Scene::DrawObjects(const std::unordered_map<std::string, Shader>& shaders) const
