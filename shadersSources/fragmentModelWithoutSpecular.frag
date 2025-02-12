@@ -78,7 +78,7 @@ LightResult LightCalculation(vec3 ambientLight, vec3 diffuseLight, vec3 specular
     float spec = 0.0f;
     if (blinn)
     {
-        vec3 halfwayVectorDir = normalize(lightDir + viewDir);
+        vec3 halfwayVectorDir = normalize(lightDir - viewDir);
         // Multiply by 2 for Blinn-Phong model
         spec = pow(max(dot(normal, halfwayVectorDir), 0.0), 2 * shininess);
     }
@@ -155,7 +155,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 void main()
 {
     // Normal vector
-    vec3 viewerDir = normalize(viewerPos - fragPos);
+    vec3 viewerDir = normalize(fragPos - viewerPos);
     vec3 norm = normalize(normal);
     vec3 result = vec3(0.0f, 0.0f, 0.0f);
     if (day)
