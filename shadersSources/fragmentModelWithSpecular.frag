@@ -59,6 +59,7 @@ in vec3 fragPos;
 uniform DirLight dirLight;
 uniform Material material;
 uniform vec3 viewerPos;
+uniform bool day;
 
 LightResult LightCalculation(vec3 ambientLight, vec3 diffuseLight, vec3 specularLight,
                              vec3 normal, vec3 ambientMaterial, vec3 diffuseMaterial, vec3 specularMaterial, float shininess,
@@ -137,10 +138,12 @@ void main()
     // Normal vector
     vec3 viewerDir = normalize(fragPos - viewerPos);
     vec3 norm = normalize(normal);
-    vec3 result = CalcDirLight(dirLight, norm, viewerDir);
+    vec3 result = vec3(0.0f, 0.0f, 0.0f);
+    if (day)
+        result += CalcDirLight(dirLight, norm, viewerDir);
     for (int i = 0; i < NUMBER_POINT_LIGHTS; i++)
         result += CalcPointLight(pointLights[i], norm, fragPos, viewerDir);
     for (int i = 0; i < NUMBER_SPOT_LIGHTS; i++)
-    result += CalcSpotLight(spotLights[i], norm, fragPos, viewerDir);
+        result += CalcSpotLight(spotLights[i], norm, fragPos, viewerDir);
     FragColor = vec4(result, 1.0);
 }

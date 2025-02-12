@@ -16,7 +16,7 @@ void Camera::updateCameraRightUp()
     cameraUp = glm::normalize(glm::cross(cameraRight, worldUp));
 }
 
-void Camera::updateCameraTarget(glm::vec3 target)
+void Camera::UpdateCameraTarget(glm::vec3 target)
 {
     cameraFront = target - cameraPosition;
 
@@ -96,23 +96,31 @@ void Camera::ProcessCamera()
     }
     else if (GetIsFindingObject())
     {
-
+        ChangeCameraFindObject();
     }
 
 }
 void Camera::ChangeCameraThirdPerson()
 {
-    static float offsetUp = 100.0f;
-    static float offsetBack = 30.0f;
+    static float offsetUp    = 100.0f;
+    static float offsetBack  = 30.0f;
     static float offsetFront = 3.0f;
     if (GetThirdPerson() && BindObject != nullptr)
     {
         glm::vec3 objPos = BindObject->GetWorldPosition();
-        glm::vec3 up = worldUp;
-        glm::vec3 objectForward = glm::normalize(BindObject->GetWorldPosition() - BindObject->GetOldPosition());
-        glm::vec3 back = - objectForward;
+        glm::vec3 up     = worldUp;
+        glm::vec3 objectForward =
+            glm::normalize(BindObject->GetWorldPosition() - BindObject->GetOldPosition());
+        glm::vec3 back   = -objectForward;
         glm::vec3 tmpPos = objPos + back * offsetBack + offsetUp * up;
-        cameraPosition = tmpPos;
-        updateCameraTarget(objPos + offsetFront * objectForward);
+        cameraPosition   = tmpPos;
+        UpdateCameraTarget(objPos + offsetFront * objectForward);
+    }
+}
+void Camera::ChangeCameraFindObject()
+{
+    if (GetIsFindingObject() && BindObject != nullptr)
+    {
+        UpdateCameraTarget(BindObject->GetWorldPosition());
     }
 }

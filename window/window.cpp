@@ -75,7 +75,7 @@ void Window::GameLoop()
         glm::perspective(glm::radians(45.0f), static_cast<float>(width) / static_cast<float>(height), 0.1f, 100.0f);
 
     createShaders();
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    changeDayNightMode(true);
     while (!glfwWindowShouldClose(window))
     {
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -111,6 +111,7 @@ void Window::GameLoop()
                 light.second->UseInShader(shader.second);
             }
             shader.second.Use();
+            shader.second.SetBool("day", Day);
             shader.second.SetVec3("viewerPos", mainScene.CurrentCamera->GetCameraPosition());
             shader.second.SetVec3("dirLight.direction", mainScene.DirectionalLight.Direction);
             shader.second.SetVec3("dirLight.ambient", mainScene.DirectionalLight.Ambient);
@@ -200,6 +201,10 @@ void Window::mouse_callback(GLFWwindow *window, double xpos, double ypos)
 }
 void Window::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
+    if (key == GLFW_KEY_N && action == GLFW_PRESS)
+    {
+        changeDayNightMode(!Day);
+    }
     if (key == GLFW_KEY_F && action == GLFW_PRESS)
     {
         if (FPSmode)
@@ -213,6 +218,18 @@ void Window::key_callback(GLFWwindow *window, int key, int scancode, int action,
             FirstMouse = true;
             FPSmode    = true;
         }
+    }
+}
+void Window::changeDayNightMode(bool mode)
+{
+    Day = mode;
+    if (Day && !Fog)
+    {
+        glClearColor(0.53f, 0.81f, 0.98f, 1.0f);
+    }
+    else
+    {
+        glClearColor(0.02f, 0.02f, 0.1f, 1.0f);
     }
 }
 

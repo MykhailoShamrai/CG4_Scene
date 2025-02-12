@@ -14,6 +14,8 @@ public:
     ~Window();
     bool FPSmode = false;
     bool FirstMouse = true;
+    bool Day = true;
+    bool Fog = false;
 private:
     unsigned short width, height;
     GLFWwindow* window;
@@ -33,9 +35,7 @@ private:
     void processMovement(GLFWwindow* window);
     void mouse_callback(GLFWwindow* window, double xpos, double ypos);
     void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-#if 0
-    void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-#endif
+    void changeDayNightMode(bool mode);
     void renderGuiCameras();
     void renderGuiObjects();
 };

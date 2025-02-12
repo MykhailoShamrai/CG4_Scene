@@ -74,8 +74,13 @@ void Scene::PrepareScene()
     auto UfoAnimatorPointer = std::make_shared<UFOAnimator>();
     basePtr = std::static_pointer_cast<AnimatorBase>(UfoAnimatorPointer);
 
-    AddCamera("mainCamera", std::make_shared<Camera>());
-    Cameras.at("mainCamera")->SetMovable(true);
+    AddCamera("FirstPersonFreeCamera", std::make_shared<Camera>(
+            glm::vec3(0.0f, 30.0f, -30.0f), glm::vec3(0.0f, 0.1f, 0.0f),
+            -90.0f, 0.0f
+        ));
+    auto mainCamera = Cameras.at("FirstPersonFreeCamera");
+    mainCamera->SetMovable(true);
+    mainCamera->UpdateCameraTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 
     AddSpotLight(
         "spotLight0", glm::vec3(0.03f, 7.91f, 0.f), glm::vec3(0.f, 0.f, -1.f),
@@ -95,8 +100,6 @@ void Scene::PrepareScene()
 
     stbi_set_flip_vertically_on_load(true);
     LoadModelToScene("../models/backpack/backpack.obj", "backpack1");
-    assert(Drawables.size() > 0);
-    assert(Drawables.find("backpack1") != Drawables.end());
     auto dr = Drawables.at("backpack1");
     dr->SetZPosition(-4.2f);
     dr->SetYPosition(-7.020f);
@@ -117,16 +120,24 @@ void Scene::PrepareScene()
     ufo->SetOldPos(ufo->GetWorldPosition());
 
     AddCamera(
-        "secondCamera",
+        "ThirdPersonCamera",
         std::make_shared<Camera>(
             glm::vec3(25.0f, 15.0f, 15.0f), glm::vec3(0.0f, 0.1f, 0.0f),
             -90.0f, 0.0f
         )
     );
 
-    Cameras.at("secondCamera")->BindObject = ufo;
-    //Cameras.at("secondCamera")->updateCameraTarget(glm::vec3(0.0f, 0.0f, 0.0f));
-    Cameras.at("secondCamera")->SetThirdPerson(true);
+    auto thirdPersonCamera = Cameras.at("ThirdPersonCamera");
+    thirdPersonCamera->BindObject = ufo;
+    thirdPersonCamera->SetThirdPerson(true);
+
+    AddCamera("WatchUfoCamera",std::make_shared<Camera>(
+            glm::vec3(-40.0f, 35.0f, 0.0f), glm::vec3(0.0f, 0.1f, 0.0f),
+            -90.0f, 0.0f));
+
+    auto WatchUfoCamera = Cameras.at("WatchUfoCamera");
+    WatchUfoCamera->BindObject = ufo;
+    WatchUfoCamera->SetIsFindingObject(true);
 
     sp1->BindToObject(ufo);
     sp1->ChangePositionToObject();

@@ -32,6 +32,6 @@ void UFOAnimator::Animate(float deltaTime, Drawable &drawable)
     drawable.SetXPosition(newX);
     drawable.SetZPosition(newZ);
     drawable.SetYRotation(std::fmod(newYRotation, 360.0f));
-    drawable.SetXRotation(newXRotation);
-    drawable.SetZRotation(newZRotation);
+    drawable.SetXRotation(std::fmod(newXRotation, 360.0f));
+    drawable.SetZRotation(std::fmod(newZRotation, 360.0f));
 }
