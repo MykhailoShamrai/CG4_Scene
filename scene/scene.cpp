@@ -93,15 +93,6 @@ void Scene::PrepareScene()
     );
     auto pl1 = Lights.at("pointLight0");
 
-    AddCamera(
-        "secondCamera",
-        std::make_shared<Camera>(
-            glm::vec3(25.0f, 15.0f, 15.0f), glm::vec3(0.0f, 0.1f, 0.0f),
-            -90.0f, 0.0f
-        )
-    );
-    Cameras.at("secondCamera")->updateCameraTarget(glm::vec3(0.0f, 0.0f, 0.0f));
-
     stbi_set_flip_vertically_on_load(true);
     LoadModelToScene("../models/backpack/backpack.obj", "backpack1");
     assert(Drawables.size() > 0);
@@ -123,6 +114,19 @@ void Scene::PrepareScene()
     ufo->SetXRotation(-90.0f);
     ufo->SetScale(2.8f);
     ufo->SetAnimated(basePtr);
+    ufo->SetOldPos(ufo->GetWorldPosition());
+
+    AddCamera(
+        "secondCamera",
+        std::make_shared<Camera>(
+            glm::vec3(25.0f, 15.0f, 15.0f), glm::vec3(0.0f, 0.1f, 0.0f),
+            -90.0f, 0.0f
+        )
+    );
+
+    Cameras.at("secondCamera")->BindObject = ufo;
+    //Cameras.at("secondCamera")->updateCameraTarget(glm::vec3(0.0f, 0.0f, 0.0f));
+    Cameras.at("secondCamera")->SetThirdPerson(true);
 
     sp1->BindToObject(ufo);
     sp1->ChangePositionToObject();

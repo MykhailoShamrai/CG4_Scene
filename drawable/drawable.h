@@ -27,8 +27,10 @@ public:
     float GetZRotation() const;
     float GetScale() const;
     glm::vec3 GetWorldPosition() const;
+    glm::vec3 GetOldPosition() const;
     glm::vec3 GetRotation() const;
 
+    void SetOldPos(const glm::vec3& pos);
     void SetXPosition(float x);
     void SetYPosition(float y);
     void SetZPosition(float z);
@@ -36,6 +38,7 @@ public:
     void SetYRotation(float angle);
     void SetZRotation(float angle);
     void SetScale(float sc);
+
     virtual ~Drawable();
     virtual void Draw(const std::unordered_map<std::string, Shader> &shaders);
     virtual void SetCustomMaterial(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess);
@@ -45,6 +48,7 @@ public:
 protected:
     // Three numbers for position in world space
     glm::vec3 worldPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 oldPosition = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec3 scale         = glm::vec3(1.0f, 1.0f, 1.0f);
     glm::vec3 rotation      = glm::vec3(0.0f, 0.0f, 0.0f);
     Material customMaterial;

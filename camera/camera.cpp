@@ -87,3 +87,32 @@ void Camera::ProcessMouseScroll(float yoffset)
     if (Zoom > 45.0f)
         Zoom = 45.0f;
 }
+
+void Camera::ProcessCamera()
+{
+    if (GetThirdPerson())
+    {
+        ChangeCameraThirdPerson();
+    }
+    else if (GetIsFindingObject())
+    {
+
+    }
+
+}
+void Camera::ChangeCameraThirdPerson()
+{
+    static float offsetUp = 100.0f;
+    static float offsetBack = 30.0f;
+    static float offsetFront = 3.0f;
+    if (GetThirdPerson() && BindObject != nullptr)
+    {
+        glm::vec3 objPos = BindObject->GetWorldPosition();
+        glm::vec3 up = worldUp;
+        glm::vec3 objectForward = glm::normalize(BindObject->GetWorldPosition() - BindObject->GetOldPosition());
+        glm::vec3 back = - objectForward;
+        glm::vec3 tmpPos = objPos + back * offsetBack + offsetUp * up;
+        cameraPosition = tmpPos;
+        updateCameraTarget(objPos + offsetFront * objectForward);
+    }
+}

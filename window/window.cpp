@@ -125,6 +125,7 @@ void Window::GameLoop()
             shader.second.SetMat4("projection", proj);
         }
 
+        mainScene.CurrentCamera->ProcessCamera();
 
         mainScene.DrawObjects(shaders);
 
@@ -294,6 +295,8 @@ void Window::renderGuiObjects()
 
         glm::vec3 position = chosenObject.GetWorldPosition();
         float pos[3] = { position.x, position.y, position.z };
+        glm::vec3 oldPosition = chosenObject.GetOldPosition();
+        float oldPos[3] = { oldPosition.x, oldPosition.y, oldPosition.z };
         glm::vec3 rotation = chosenObject.GetRotation();
         float rot[3] = { rotation.x, rotation.y, rotation.z };
         float scale = chosenObject.GetScale();
@@ -341,7 +344,9 @@ void Window::renderGuiObjects()
             chosenObject.SetXPosition(pos[0]);
             chosenObject.SetYPosition(pos[1]);
             chosenObject.SetZPosition(pos[2]);
+
         }
+        ImGui::DragFloat3("OldPositions", oldPos);
 # pragma endregion
 # pragma region Rotation changing
         bool changedRotation = false;

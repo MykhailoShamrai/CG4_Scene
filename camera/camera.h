@@ -2,6 +2,7 @@
 #define CAMERA_H
 #include <glad/glad.h>
 
+#include "drawable.h"
 #include "glm/detail/type_mat.hpp"
 #include "glm/detail/type_vec3.hpp"
 
@@ -22,6 +23,7 @@ public:
     float MovementSpeed;
     float MouseSensitivity;
     float Zoom;
+    std::shared_ptr<Drawable> BindObject = nullptr;
 
     Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
         float yaw = -90.0f, float pitch = 0.0f);
@@ -32,6 +34,12 @@ public:
     void ProcessMouseScroll(float yoffset);
     bool GetMovable() const { return isMovable; }
     void SetMovable(const bool &val) { isMovable = val; }
+    bool GetThirdPerson() const { return isThirdPerson; }
+    void SetThirdPerson(const bool &val) { isThirdPerson = val; }
+    bool GetIsFindingObject() const { return isFindingObject; }
+    void SetIsFindingObject(const bool &val) { isFindingObject = val; }
+    void ProcessCamera();
+    void ChangeCameraThirdPerson();
 
     glm::vec3 GetCameraPosition() { return cameraPosition; }
 private:
@@ -42,6 +50,8 @@ private:
     glm::vec3 cameraRight;
     glm::vec3 worldUp;
     bool isMovable;
+    bool isThirdPerson;
+    bool isFindingObject;
 
     // Function for finding front vector
     void updateCameraRightUp();

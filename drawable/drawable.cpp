@@ -15,11 +15,28 @@ float Drawable::GetYRotation() const { return rotation.y; }
 float Drawable::GetZRotation() const { return rotation.z; }
 float Drawable::GetScale() const { return scale.x; }
 glm::vec3 Drawable::GetWorldPosition() const { return worldPosition; }
+glm::vec3 Drawable::GetOldPosition() const { return oldPosition; }
 glm::vec3 Drawable::GetRotation() const { return rotation; }
+void Drawable::SetOldPos(const glm::vec3 &pos) { oldPosition = pos; }
 
-void Drawable::SetXPosition(float x) { worldPosition.x = x; }
-void Drawable::SetYPosition(float y) { worldPosition.y = y; }
-void Drawable::SetZPosition(float z) { worldPosition.z = z; }
+void Drawable::SetXPosition(float x)
+{
+    oldPosition.x = worldPosition.x;
+    worldPosition.x = x;
+}
+
+void Drawable::SetYPosition(float y)
+{
+    oldPosition.y = worldPosition.y;
+    worldPosition.y = y;
+}
+
+void Drawable::SetZPosition(float z)
+{
+    oldPosition.z = worldPosition.z;
+    worldPosition.z = z;
+}
+
 void Drawable::SetXRotation(float angle) { rotation.x = angle; }
 void Drawable::SetYRotation(float angle) { rotation.y = angle; }
 void Drawable::SetZRotation(float angle) { rotation.z = angle; }
