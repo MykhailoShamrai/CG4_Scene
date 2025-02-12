@@ -35,6 +35,8 @@ struct SpotLight: public BindLight
     void ChangePositionToObject() override;
     void BindToObject(const std::shared_ptr<Drawable>& ptr) override;
     void UseInShader(const Shader &shader) override;
+
+    void ChangeDirVector(glm::vec3 direction);
 };
 
 

@@ -1,15 +1,15 @@
 #include "UFOAnimator.h"
 
 #include <cmath>
-
+#include <numbers>
 #include "drawable.h"
 
 void UFOAnimator::Animate(float deltaTime, Drawable &drawable)
 {
     static float mainAngle = 0.0f;
     mainAngle += deltaTime;
-    if (mainAngle > 2.0f * M_PI) {
-        mainAngle -= 2.0f * M_PI;
+    if (mainAngle > 2.0f * std::numbers::pi_v<float>) {
+        mainAngle -= 2.0f * std::numbers::pi_v<float>;
     }
     float radius = 10.0f;
     float speed = 1.0f;     // Speed of movement in the circle

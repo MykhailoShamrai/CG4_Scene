@@ -51,3 +51,8 @@ void SpotLight::UseInShader(const Shader &shader)
     shader.SetFloat(identifier + ".cutOff", glm::cos(glm::radians(cutOff)));
     shader.SetFloat(identifier + ".outerCutOff", glm::cos(glm::radians(outerCutOff)));
 }
+
+void SpotLight::ChangeDirVector(glm::vec3 direction)
+{
+    this->Direction = glm::normalize(direction);
+}

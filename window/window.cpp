@@ -408,4 +408,17 @@ void Window::renderGuiObjects()
 # pragma endregion
         ImGui::End();
     }
+
+    // For Light
+# pragma region Light changing
+    if (mainScene.CurrentLight != nullptr)
+    {
+        ImGui::Begin("Change Light direction");
+        glm::vec3& direction = mainScene.CurrentLight->Direction;
+        if (ImGui::SliderFloat3("Direction", glm::value_ptr(direction), -1.0f, 1.0f))
+            mainScene.CurrentLight->ChangeDirVector(direction);
+
+        ImGui::End();
+    }
+# pragma endregion
 }

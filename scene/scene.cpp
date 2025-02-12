@@ -84,6 +84,8 @@ void Scene::PrepareScene()
         0
     );
     auto sp1 = Lights.at("spotLight0");
+    CurrentLightName = "spotLight0";
+    CurrentLight = std::dynamic_pointer_cast<SpotLight>(sp1);
 
     AddPointLight(
         "pointLight0", glm::vec3(0.f, 0.f, 0.f), 1.0f, 0.09f, 0.032f, glm::vec3(0.5, 0.15f, 0.05f),

@@ -8,6 +8,7 @@
 #include "../camera/camera.h"
 #include "../lights/bindLight.h"
 #include "../lights/dirLight.h"
+#include "../lights/spotLight.h"
 #include "drawable.h"
 
 class Scene
@@ -27,7 +28,8 @@ public:
 
     // Map of PointLights on scene
     std::pmr::unordered_map<std::string, std::shared_ptr<BindLight>> Lights;
-    std::shared_ptr<BindLight> CurrentLight;
+    // TODO: I don't check if i have proper name. It's only test solution for presentation
+    std::shared_ptr<SpotLight> CurrentLight;
     std::string CurrentLightName;
 
     // Global Direction light
@@ -65,6 +67,8 @@ public:
     void DrawObjects(const std::unordered_map<std::string, Shader>& shaders) const;
     void UpdateSelectedCamera();
     void UpdateChosenObject();
+
+
     glm::mat4 GetViewMatrix();
 
 private:
