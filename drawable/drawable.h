@@ -14,6 +14,7 @@ struct Material {
     bool IsCustom = false;
 };
 
+
 // Class that represents the all objects that are drawable. It's something like
 // interface, all objects like models or my custom objects should implement it.
 class Drawable
