@@ -113,7 +113,7 @@ void Window::GameLoop()
             shader.second.Use();
 
             // ---------------------------- Uniforms for each shader ---------------------------- //
-
+            shader.second.SetBool("blinn", BlinnPhong);
             shader.second.SetBool("fog", Fog);
             shader.second.SetFloat("fogMinDist", FogMinDist);
             shader.second.SetFloat("fogMaxDist", FogMaxDist);
@@ -210,6 +210,10 @@ void Window::mouse_callback(GLFWwindow *window, double xpos, double ypos)
 }
 void Window::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
+    if (key == GLFW_KEY_B && action == GLFW_PRESS)
+    {
+        changeBlinnPhongMode(!BlinnPhong);
+    }
     if (key == GLFW_KEY_M && action == GLFW_PRESS)
     {
         changeFogMode(!Fog);
@@ -233,6 +237,12 @@ void Window::key_callback(GLFWwindow *window, int key, int scancode, int action,
         }
     }
 }
+
+void Window::changeBlinnPhongMode(bool mode)
+{
+    BlinnPhong = mode;
+}
+
 void Window::changeDayNightMode(bool mode)
 {
     Day = mode;
@@ -280,6 +290,11 @@ void Window::renderGuiCameras()
     if (ImGui::Checkbox("Fog", &Fog))
     {
         changeFogMode(Fog);
+    }
+
+    if (ImGui::Checkbox("Blinn Phong model", &BlinnPhong))
+    {
+        changeBlinnPhongMode(BlinnPhong);
     }
 
     ImGui::SliderFloat("Fog Min distance", &FogMinDist, 0.1f, 5.0f);

@@ -67,14 +67,25 @@ uniform float fogMaxDist;
 uniform float fogMinDist;
 uniform vec3 fogColor;
 
+uniform bool blinn;
+
 LightResult LightCalculation(vec3 ambientLight, vec3 diffuseLight, vec3 specularLight,
     vec3 normal, vec3 ambientMaterial, vec3 diffuseMaterial, vec3 specularMaterial, float shininess,
     vec3 lightDir, vec3 viewDir)
 {
     vec3 reflectDir = reflect(lightDir, normal);
     float diff = max(dot(normal, lightDir), 0.0);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0),
-                                      shininess);
+    float spec = 0.0f;
+    if (blinn)
+    {
+        vec3 halfwayVectorDir = normalize(lightDir - viewDir);
+        // Multiply by 2 for Blinn-Phong model
+        spec = pow(max(dot(normal, halfwayVectorDir), 0.0), 2 * shininess);
+    }
+    else
+    {
+        spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+    }
 
     LightResult res;
     res.ambient = ambientLight * ambientMaterial;

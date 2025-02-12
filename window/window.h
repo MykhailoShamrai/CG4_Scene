@@ -19,6 +19,7 @@ public:
     bool FirstMouse = true;
     bool Day        = true;
     bool Fog        = false;
+    bool BlinnPhong = false;
 
     float FogMaxDist  = 100.0f;
     float FogMinDist   = 0.1;
@@ -46,6 +47,7 @@ private:
     void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
     void changeDayNightMode(bool mode);
     void changeFogMode(bool mode);
+    void changeBlinnPhongMode(bool mode);
     void renderGuiCameras();
     void renderGuiObjects();
 };
