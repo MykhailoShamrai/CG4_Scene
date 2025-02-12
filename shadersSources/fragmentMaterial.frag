@@ -162,11 +162,11 @@ void main()
     vec3 norm = normalize(normal);
     vec3 result = vec3(0.0f, 0.0f, 0.0f);
     if (day)
-        result += CalcDirLight(dirLight, norm, viewerDir);
+    result += CalcDirLight(dirLight, norm, viewerDir);
     for (int i = 0; i < NUMBER_POINT_LIGHTS; i++)
-        result += CalcPointLight(pointLights[i], norm, fragPos, viewerDir);
+    result += CalcPointLight(pointLights[i], norm, fragPos, viewerDir);
     for (int i = 0; i < NUMBER_SPOT_LIGHTS; i++)
-        result += CalcSpotLight(spotLights[i], norm, fragPos, viewerDir);
+    result += CalcSpotLight(spotLights[i], norm, fragPos, viewerDir);
     if (fog)
     {
         float dist = length(fragPosInViewSpace);

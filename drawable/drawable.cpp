@@ -58,7 +58,15 @@ void Drawable::SetSpecularAndShininess(const glm::vec3 &specular, const float &s
 {
     customMaterial.Specular  = specular;
     customMaterial.Shininess = shininess;
+    customMaterial.IsCustom = false;
 }
+
+void Drawable::SetDefaultSpecularAndShininess(const glm::vec3 &specular, const float &shininess)
+{
+    defaultMaterial.Specular  = specular;
+    defaultMaterial.Shininess = shininess;
+}
+
 void Drawable::Animate(float timeElapsed)
 {
     if (animator != nullptr)
@@ -70,9 +78,18 @@ void Drawable::SetAnimated(const std::shared_ptr<AnimatorBase> &animator)
     this->animator = animator;
 }
 
-void Drawable::SetCustomMaterial(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess)
+void Drawable::SetCustomMaterial(
+    glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess
+)
 {
-    customMaterial = Material{ ambient, diffuse, specular, shininess, true };
+    customMaterial = Material{ambient, diffuse, specular, shininess, true};
+}
+
+void Drawable::SetDefaultMaterial(
+    glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess
+)
+{
+    defaultMaterial = Material{ambient, diffuse, specular, shininess, true};
 }
 
 glm::mat4 Drawable::createModelMatrix()

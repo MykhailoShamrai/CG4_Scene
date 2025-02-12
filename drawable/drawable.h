@@ -2,6 +2,7 @@
 #define DRAWABLE_H
 #include <memory>
 #include <unordered_map>
+#include <vector>
 
 #include "../animator/animatorBase.h"
 #include "shader.h"
@@ -14,12 +15,18 @@ struct Material {
     bool IsCustom = false;
 };
 
+struct PredefinedMaterial
+{
+    std::string Name;
+    Material Material;
+};
 
 // Class that represents the all objects that are drawable. It's something like
 // interface, all objects like models or my custom objects should implement it.
 class Drawable
 {
 public:
+
     float GetXPosition() const;
     float GetYPosition() const;
     float GetZPosition() const;
@@ -43,9 +50,14 @@ public:
     virtual ~Drawable();
     virtual void Draw(const std::unordered_map<std::string, Shader> &shaders);
     virtual void SetCustomMaterial(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess);
+    virtual void SetDefaultMaterial(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess);
     virtual void SetSpecularAndShininess(const glm::vec3 &specular, const float &shininess);
+    virtual void SetDefaultSpecularAndShininess(const glm::vec3 &specular, const float &shininess);
     void Animate(float timeElapsed);
     void SetAnimated(const std::shared_ptr<AnimatorBase> &animator);
+
+    static std::vector<PredefinedMaterial> PredefinedMaterials;
+
 protected:
     // Three numbers for position in world space
     glm::vec3 worldPosition = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -53,6 +65,7 @@ protected:
     glm::vec3 scale         = glm::vec3(1.0f, 1.0f, 1.0f);
     glm::vec3 rotation      = glm::vec3(0.0f, 0.0f, 0.0f);
     Material customMaterial;
+    Material defaultMaterial;
     // First element of vector -> rotation around x
     // Second element -> rotation around y
     // Third element -> rotation around z
@@ -60,5 +73,7 @@ protected:
     glm::mat4 createModelMatrix();
     void setTransformationsForDrawable(const std::unordered_map<std::string, Shader> &shaders);
 };
+
+
 
 #endif  // DRAWABLE_H

@@ -15,7 +15,9 @@ void Model::Draw(const std::unordered_map<std::string, Shader> &shaders)
         mesh.Draw(shaders);
     }
 }
-void Model::SetCustomMaterial(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess)
+void Model::SetCustomMaterial(
+    glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess
+)
 {
     Drawable::SetCustomMaterial(ambient, diffuse, specular, shininess);
     for (auto &mesh : meshes)
@@ -23,9 +25,30 @@ void Model::SetCustomMaterial(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 sp
         mesh.Material_ = customMaterial;
     }
 }
+
+void Model::SetDefaultMaterial(
+    glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess
+)
+{
+    Drawable::SetDefaultMaterial(ambient, diffuse, specular, shininess);
+    for (auto &mesh : meshes)
+    {
+        mesh.Material_ = customMaterial;
+    }
+}
+
 void Model::SetSpecularAndShininess(const glm::vec3 &specular, const float &shininess)
 {
     Drawable::SetSpecularAndShininess(specular, shininess);
+    for (auto &mesh : meshes)
+    {
+        mesh.Material_ = customMaterial;
+    }
+}
+
+void Model::SetDefaultSpecularAndShininess(const glm::vec3 &specular, const float &shininess)
+{
+    Drawable::SetDefaultSpecularAndShininess(specular, shininess);
     for (auto &mesh : meshes)
     {
         mesh.Material_ = customMaterial;

@@ -19,7 +19,9 @@ public:
     Model(const std::string& path) { loadModel(path); };
     void Draw(const std::unordered_map<std::string, Shader> &shaders) override;
     void SetCustomMaterial(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess) override;
+    void SetDefaultMaterial(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess) override;
     void SetSpecularAndShininess(const glm::vec3 &specular, const float &shininess) override;
+    void SetDefaultSpecularAndShininess(const glm::vec3 &specular, const float &shininess) override;
 
 private:
     std::vector<Mesh> meshes;
