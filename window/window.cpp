@@ -111,6 +111,13 @@ void Window::GameLoop()
                 light.second->UseInShader(shader.second);
             }
             shader.second.Use();
+
+            // ---------------------------- Uniforms for each shader ---------------------------- //
+
+            shader.second.SetBool("fog", Fog);
+            shader.second.SetFloat("fogMinDist", FogMinDist);
+            shader.second.SetFloat("fogMaxDist", FogMaxDist);
+            shader.second.SetVec3("fogColor", FogColor);
             shader.second.SetBool("day", Day);
             shader.second.SetVec3("viewerPos", mainScene.CurrentCamera->GetCameraPosition());
             shader.second.SetVec3("dirLight.direction", mainScene.DirectionalLight.Direction);
@@ -124,6 +131,8 @@ void Window::GameLoop()
             shader.second.SetMat4("view", view);
             // Projection matrix is passed here.
             shader.second.SetMat4("projection", proj);
+
+            // ---------------------------------------------------------------------------------- //
         }
 
         mainScene.CurrentCamera->ProcessCamera();
@@ -201,6 +210,10 @@ void Window::mouse_callback(GLFWwindow *window, double xpos, double ypos)
 }
 void Window::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
+    if (key == GLFW_KEY_M && action == GLFW_PRESS)
+    {
+        changeFogMode(!Fog);
+    }
     if (key == GLFW_KEY_N && action == GLFW_PRESS)
     {
         changeDayNightMode(!Day);
@@ -223,13 +236,33 @@ void Window::key_callback(GLFWwindow *window, int key, int scancode, int action,
 void Window::changeDayNightMode(bool mode)
 {
     Day = mode;
-    if (Day && !Fog)
+    if (!Fog)
     {
-        glClearColor(0.53f, 0.81f, 0.98f, 1.0f);
+        if (Day)
+            glClearColor(DayColor.x, DayColor.y, DayColor.z, 1.0f);
+        else
+            glClearColor(NightColor.x, NightColor.y, NightColor.z, 1.0f);
     }
     else
     {
-        glClearColor(0.02f, 0.02f, 0.1f, 1.0f);
+        changeFogMode(Fog);
+    }
+}
+
+void Window::changeFogMode(bool mode)
+{
+    Fog = mode;
+    if (Fog)
+    {
+        if (Day)
+            FogColor = glm::vec3(0.4f, 0.4f, 0.4f);
+        else
+            FogColor = glm::vec3(0.1f, 0.1f, 0.1f);
+        glClearColor(FogColor.x, FogColor.y, FogColor.z, 1.0);
+    }
+    else
+    {
+        changeDayNightMode(Day);
     }
 }
 
@@ -238,6 +271,19 @@ void Window::renderGuiCameras()
     ImGui::Begin("Cameras");
     float fps = ImGui::GetIO().Framerate;
     ImGui::Text("FPS: %.1f", fps);
+
+    if (ImGui::Checkbox("Day", &Day))
+    {
+        changeDayNightMode(Day);
+    }
+
+    if (ImGui::Checkbox("Fog", &Fog))
+    {
+        changeFogMode(Fog);
+    }
+
+    ImGui::SliderFloat("Fog Min distance", &FogMinDist, 0.1f, 5.0f);
+    ImGui::SliderFloat("Fog Max distance", &FogMaxDist, 8.0f, 100.0f);
 
     // Part with list box
     std::vector<const char *> keys;

@@ -55,11 +55,17 @@ out vec4 FragColor;
 in vec3 normal;
 in vec2 texCoord;
 in vec3 fragPos;
+in vec3 fragPosInViewSpace;
 
 uniform DirLight dirLight;
 uniform Material material;
 uniform vec3 viewerPos;
 uniform bool day;
+
+uniform bool fog;
+uniform float fogMaxDist;
+uniform float fogMinDist;
+uniform vec3 fogColor;
 
 LightResult LightCalculation(vec3 ambientLight, vec3 diffuseLight, vec3 specularLight,
                              vec3 normal, vec3 ambientMaterial, vec3 diffuseMaterial, vec3 specularMaterial, float shininess,
@@ -145,5 +151,12 @@ void main()
         result += CalcPointLight(pointLights[i], norm, fragPos, viewerDir);
     for (int i = 0; i < NUMBER_SPOT_LIGHTS; i++)
         result += CalcSpotLight(spotLights[i], norm, fragPos, viewerDir);
+    if (fog)
+    {
+        float dist = length(fragPosInViewSpace);
+        float fogFactor = (fogMaxDist - dist) / (fogMaxDist - fogMinDist);
+        fogFactor = clamp(fogFactor, 0.0f, 1.0f);
+        result = mix(fogColor, result, fogFactor);
+    }
     FragColor = vec4(result, 1.0);
 }
